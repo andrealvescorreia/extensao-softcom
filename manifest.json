@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ClienteSatisfeito + AreaPartner",
+  "version": "1.0",
+  "description": "Automatiza processos repetitivos.",
+  "permissions": ["scripting", "storage"],
+  "host_permissions": [
+    "https://areapartner.softcomsistemas.com.br/*",
+    "https://chat.clientesatisfeito.com.br/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ClienteSatisfeito + AreaPartner"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chat.clientesatisfeito.com.br/*"],
+      "js": ["utils.js", "content1.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://areapartner.softcomsistemas.com.br/*"],
+      "js": ["utils.js", "content2.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
