@@ -19,7 +19,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const textareaReason = getElementByXPath(
       '//*[@id="filter"]/div[2]/div/form/div[7]/textarea'
     );
-    if (!selectSupport || !selectSubject || !selectUser || !textareaReason) {
+    const urgenteSwitch = getElementByXPath(
+      '//*[@id="filter"]/div[2]/div/form/div[18]/input'
+    );
+    if (
+      !selectSupport ||
+      !selectSubject ||
+      !selectUser ||
+      !textareaReason ||
+      !urgenteSwitch
+    ) {
       throw new Error("Elemento html não encontrado.");
     }
     if (request.action === "sped") {
@@ -35,9 +44,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       changeSelectedOption(selectSupport, "Apoio Tecnico");
       changeSelectedOption(selectSubject, "APOIO");
       changeSelectedOption(selectUser, "[selecione]");
+      !urgenteSwitch.checked ? urgenteSwitch.click() : null;
     }
   } catch (error) {
-    console.error("[Content1] Erro ao processar ação:", error);
+    console.error("[Content2] Erro ao processar ação:", error);
     sendResponse({
       success: false,
       message: "Erro ao processar ação",
