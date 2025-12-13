@@ -3,38 +3,30 @@
 
 <head>
   <title>ClienteSatisfeito + AreaPartner</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      width: 200px;
-      padding: 10px;
-    }
-
-    label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css">
 </head>
 
 <body>
-  <h3>ClienteSatisfeito</h3>
-  <p>Buscar cliente na area partner por...</p>
-  <button type="button" id="searchButton">Nome</button>
-  </br>
-  <button type="button" id="searchButtonFullName">Nome Completo</button>
-  </br>
-  <button type="button" id="buttonSearchByCode">Codigo (observacao)</button>
-  <h3>Area Partner</h3>
-  <p>Ocorrencia...</p>
-  <button type="button" id="sped">SPED</button>
-  </br>
-  <button type="button" id="apoio">Encaminhar para Matriz</button>
-  <label>
-    <input type="checkbox" id="useCapturedClient">
-    Utilizar cliente capturado
-  </label>
+  <div class="section" id="cliente-satisfeito-section">
+    <h3>ClienteSatisfeito</h3>
+    <p>Buscar cliente na area partner por...</p>
+    <button type="button" id="searchButton">Nome</button>
+    <button type="button" id="searchButtonFullName">Nome Completo</button>
+    <button type="button" id="buttonSearchByCode">Codigo (observacao)</button>
+  </div>
+
+  <div class="section" id="area-partner-section">
+    <h3>Area Partner</h3>
+    <p>Ocorrencia...</p>
+    <button type="button" id="sped">SPED</button>
+    <button type="button" id="apoio">Encaminhar para Matriz</button>
+    <label>
+      <input type="checkbox" id="useCapturedClient">
+      Utilizar cliente capturado
+    </label>
+  </div>
+
+
   <script src="popup.js"></script>
   <script src="utils.js"></script>
 </body>
