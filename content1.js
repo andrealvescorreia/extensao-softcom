@@ -1,41 +1,114 @@
 // CLIENTE SATISFEITO
+
 const clientNameXPath = "//*[@id='InfoCabecalhoChat']/div[1]";
 const clientObservacoesAriaLabel = "Observações";
+const headerXPath = '//*[@id="q-app"]/div/div/div/div/div/header/div';
+
+const btnOcorrencia = createButton(
+  "softcom-ocorrencia-btn",
+  "Criar Ocorrência",
+  journalPlusSVG
+);
+
+const btnVerCliente = createButton(
+  "softcom-ver-cliente-btn",
+  "Ver Cliente",
+  pencilSVG
+);
+
+function injectIntoHeader() {
+  const header = getElementByXPath(headerXPath);
+  if (!header) return;
+
+  // Evita duplicação
+  if (!document.getElementById("softcom-ocorrencia-btn")) {
+    header.insertBefore(btnOcorrencia, header.children[1]);
+  }
+  if (!document.getElementById("softcom-ver-cliente-btn")) {
+    header.insertBefore(btnVerCliente, header.children[2]);
+  }
+}
+
+// Executa quando o DOM estiver pronto
+function initHeaderInjection() {
+  const run = () => injectIntoHeader();
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run, { once: true });
+  } else run();
+
+  // Mantém para páginas SPA (DOM muda depois)
+  const mo = new MutationObserver(() => injectIntoHeader());
+  mo.observe(document.documentElement, { childList: true, subtree: true });
+}
+
+function captureClienteName() {
+  const chatClientNameElement = getElementByXPath(clientNameXPath);
+  if (!chatClientNameElement) {
+    alert("Nome do cliente: elemento HTML não encontrado.");
+    return null;
+  }
+  return chatClientNameElement.innerText.trim();
+}
+
+function captureClientCode() {
+  const chatClientObservacoesElement = document.querySelector(
+    `[aria-label="${clientObservacoesAriaLabel}"]`
+  );
+  if (!chatClientObservacoesElement) {
+    alert("Código do cliente: elemento HTML não encontrado.");
+    return null;
+  }
+  return chatClientObservacoesElement.value.trim();
+}
+
+function captureCurrentClientInfo() {
+  return {
+    name: captureClienteName(),
+    code: captureClientCode(),
+  };
+}
+
+btnOcorrencia.addEventListener("click", () => {
+  const currentClientInfo = captureCurrentClientInfo();
+  if (currentClientInfo.code === "") {
+    alert("Código do cliente não encontrado. Insira o código nas observações.");
+    btnOcorrencia.href = undefined;
+    return;
+  }
+  const url = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${currentClientInfo.code}`;
+  btnOcorrencia.href = url;
+});
+
+btnVerCliente.addEventListener("click", () => {
+  const currentClientInfo = captureCurrentClientInfo();
+  if (currentClientInfo.code === "") {
+    alert("Código do cliente não encontrado. Insira o código nas observações.");
+    btnOcorrencia.href = undefined;
+    return;
+  }
+  const url = `https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/${currentClientInfo.code}`;
+  btnVerCliente.href = url;
+});
 
 // Escutar cliques dos botões vindos do popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   try {
-    const chatClientNameElement = getElementByXPath(clientNameXPath);
-    const chatClientObservacoesElement = document.querySelector(
-      `[aria-label="${clientObservacoesAriaLabel}"]`
-    );
-    if (!chatClientNameElement) {
-      throw new Error("Elemento do nome do cliente não encontrado.");
-    }
-    if (!chatClientObservacoesElement) {
-      throw new Error("Elemento das observações do cliente não encontrado.");
-    }
-    let chatClientName = chatClientNameElement.innerText;
+    const clientInfo = captureCurrentClientInfo();
 
     if (request.action === "searchButtonClicked") {
-      const nameParts = chatClientName.split(" ");
+      const nameParts = clientInfo.name.split(" ");
       nameParts.shift();
       if (nameParts[0] === "-") nameParts.shift();
-      chatClientName = nameParts.join(" ");
 
       sendResponse({
         success: true,
-        clientName: chatClientName,
+        clientName: nameParts.join(" "),
       });
     } else if (request.action === "searchButtonFullNameClicked") {
       sendResponse({
         success: true,
-        clientName: chatClientName,
-      });
-    } else if (request.action === "buttonSearchByCodeClicked") {
-      sendResponse({
-        success: true,
-        clientCode: chatClientObservacoesElement.value,
+        clientName: clientInfo.name,
       });
     }
   } catch (error) {
@@ -49,3 +122,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   return true;
 });
+
+initHeaderInjection();
