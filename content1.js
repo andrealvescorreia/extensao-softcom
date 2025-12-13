@@ -16,16 +16,30 @@ const btnVerCliente = createButton(
   pencilSVG
 );
 
+const iconImg = document.createElement("img");
+iconImg.src = chrome.runtime.getURL("icon.png");
+iconImg.alt = "Softcom Extensão";
+iconImg.style.cssText = `
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  cursor: pointer;
+`;
+iconImg.id = "softcom-header-icon";
+
 function injectIntoHeader() {
   const header = getElementByXPath(headerXPath);
   if (!header) return;
 
   // Evita duplicação
+  if (!document.getElementById("softcom-header-icon")) {
+    header.insertBefore(iconImg, header.children[1]);
+  }
   if (!document.getElementById("softcom-ocorrencia-btn")) {
-    header.insertBefore(btnOcorrencia, header.children[1]);
+    header.insertBefore(btnOcorrencia, header.children[2]);
   }
   if (!document.getElementById("softcom-ver-cliente-btn")) {
-    header.insertBefore(btnVerCliente, header.children[2]);
+    header.insertBefore(btnVerCliente, header.children[3]);
   }
 }
 
@@ -72,8 +86,8 @@ function captureCurrentClientInfo() {
 btnOcorrencia.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    alert("Código do cliente não encontrado. Insira o código nas observações.");
     btnOcorrencia.href = undefined;
+    alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
   const url = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${currentClientInfo.code}`;
@@ -83,8 +97,8 @@ btnOcorrencia.addEventListener("click", () => {
 btnVerCliente.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
+    btnVerCliente.href = undefined;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
-    btnOcorrencia.href = undefined;
     return;
   }
   const url = `https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/${currentClientInfo.code}`;
