@@ -4,6 +4,31 @@ const buttonSearchByCode = document.getElementById("buttonSearchByCode");
 const sped = document.getElementById("sped");
 const apoio = document.getElementById("apoio");
 const useCapturedClient = document.getElementById("useCapturedClient");
+const clienteSatisfeitoSection = document.getElementById(
+  "cliente-satisfeito-section"
+);
+const areaPartnerSection = document.getElementById("area-partner-section");
+
+// Verificar URL atual e mostrar/ocultar seções
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  if (tabs[0]) {
+    const currentUrl = tabs[0].url;
+
+    // Mostrar seção Cliente Satisfeito apenas se estiver na página correta
+    if (currentUrl.includes("chat.clientesatisfeito.com.br")) {
+      clienteSatisfeitoSection.style.display = "block";
+    } else {
+      clienteSatisfeitoSection.style.display = "none";
+    }
+
+    // Mostrar seção Area Partner apenas se estiver na página correta
+    if (currentUrl.includes("areapartner.softcomsistemas.com.br")) {
+      areaPartnerSection.style.display = "block";
+    } else {
+      areaPartnerSection.style.display = "none";
+    }
+  }
+});
 
 function searchClientByNameOnAreaPartner(clientName) {
   const url = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${clientName}`;
