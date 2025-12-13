@@ -11,6 +11,12 @@ function searchClientByNameOnAreaPartner(clientName) {
   chrome.tabs.create({ url: url });
 }
 
+function searchClientByCodeOnAreaPartner(clientCode) {
+  const url = `https://areapartner.softcomsistemas.com.br/cliente/index?&registro=${clientCode}`;
+
+  chrome.tabs.create({ url: url });
+}
+
 function handleAction(action, supportedUrl) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (!tabs[0]) return;
@@ -33,6 +39,9 @@ function handleAction(action, supportedUrl) {
       ) {
         searchClientByNameOnAreaPartner(response.clientName);
       }
+      if (action === "buttonSearchByCodeClicked") {
+        searchClientByCodeOnAreaPartner(response.clientCode);
+      }
     });
   });
 }
@@ -43,6 +52,10 @@ searchButton.addEventListener("click", () => {
 
 searchButtonFullName.addEventListener("click", () => {
   handleAction("searchButtonFullNameClicked", "chat.clientesatisfeito.com.br");
+});
+
+buttonSearchByCode.addEventListener("click", () => {
+  handleAction("buttonSearchByCodeClicked", "chat.clientesatisfeito.com.br");
 });
 
 sped.addEventListener("click", () => {
