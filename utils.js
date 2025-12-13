@@ -21,10 +21,10 @@ const pencilSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16
 </svg>`;
 
 function createButton(id, text, icon) {
-  const btnOcorrencia = document.createElement("a");
-  btnOcorrencia.id = id;
-  btnOcorrencia.textContent = text;
-  btnOcorrencia.style.cssText = `
+  const button = document.createElement("a");
+  button.id = id;
+  button.textContent = text;
+  button.style.cssText = `
     z-index: 1000;
     cursor: pointer;
     text-decoration: none;
@@ -38,17 +38,30 @@ function createButton(id, text, icon) {
     gap: 5px;
     flex-direction: row-reverse;
   `;
-  btnOcorrencia.target = "_blank";
-  btnOcorrencia.rel = "noopener noreferrer";
 
+  button.target = "_blank";
+  button.rel = "noopener noreferrer";
+
+  // Hover effects for btnOcorrencia
+  button.style.transition = "all 0.2s ease";
+  button.addEventListener("mouseenter", () => {
+    button.style.transform = "translateY(-1px)";
+    button.style.boxShadow = "0 4px 8px rgba(15, 13, 8, 0.15)";
+    button.style.backgroundColor = "#1a1410ff";
+  });
+  button.addEventListener("mouseleave", () => {
+    button.style.transform = "translateY(0)";
+    button.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+    button.style.backgroundColor = "#000000ff";
+  });
   if (icon !== undefined) {
-    const svgIcon1 = document.createElement("img");
-    svgIcon1.src = "data:image/svg+xml;base64," + btoa(journalPlusSVG);
+    const svgIconElement = document.createElement("img");
+    svgIconElement.src = "data:image/svg+xml;base64," + btoa(icon);
 
-    svgIcon1.style.width = "15px";
-    svgIcon1.style.height = "15px";
-    btnOcorrencia.appendChild(svgIcon1);
+    svgIconElement.style.width = "15px";
+    svgIconElement.style.height = "15px";
+    button.appendChild(svgIconElement);
   }
 
-  return btnOcorrencia;
+  return button;
 }
