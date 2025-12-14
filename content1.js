@@ -56,13 +56,13 @@ function initHeaderInjection() {
   mo.observe(document.documentElement, { childList: true, subtree: true });
 }
 
-function captureClienteName() {
+function captureClientName() {
   const chatClientNameElement = getElementByXPath(clientNameXPath);
   if (!chatClientNameElement) {
     alert("Nome do cliente: elemento HTML não encontrado.");
     return null;
   }
-  return chatClientNameElement.innerText.trim();
+  return chatClientNameElement.innerText.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
 }
 
 function captureClientCode() {
@@ -78,7 +78,7 @@ function captureClientCode() {
 
 function captureCurrentClientInfo() {
   return {
-    name: captureClienteName(),
+    name: captureClientName(),
     code: captureClientCode(),
   };
 }
