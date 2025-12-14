@@ -7,16 +7,18 @@ const clienteSatisfeitoHTMLIdentifiers = {
 };
 
 const areaPartnerHTMLIdentifiers = {
+  solicitanteName: "Solicitante",
+  dddName: "txtDDDContato",
+  foneName: "txtFoneContato",
   suporteId: "suportes",
   assuntoId: "assunto",
   userId: "usuario_partner_id",
   motivoName: "Motivo",
-  solicitanteName: "Solicitante",
-  dddName: "txtDDDContato",
-  foneName: "txtFoneContato",
-  servicoRealizadoName: "ServiçoRealizado",
+  moduloName: "modulo",
+  exemploName: "exemplo",
   horaChegadaName: "HoraChegada",
   horaSaidaName: "HoraSaida",
+  servicoRealizadoName: "ServiçoRealizado",
   urgenteXPath: '//*[@id="filter"]/div[2]/div/form/div[18]/input',
   IsXPath: "//*[@id='filter']/div[2]/div/form/div[19]/input",
 };
