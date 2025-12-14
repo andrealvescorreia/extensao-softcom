@@ -1,11 +1,5 @@
 // CLIENTE SATISFEITO
 
-const clientNameXPath = "//*[@id='InfoCabecalhoChat']/div[1]";
-const clientObservacoesAriaLabel = "Observações";
-const clientPhoneXPath =
-  '//*[@id="q-app"]/div/div/div/div/div/div[3]/aside/div/div[1]/div[2]/div/div/div/div[1]/div/div/div[1]/div/div[2]/div[2]/span[1]';
-const headerXPath = '//*[@id="q-app"]/div/div/div/div/div/header/div';
-
 const btnOcorrencia = createButton(
   "softcom-ocorrencia-btn",
   "Criar Ocorrência",
@@ -30,7 +24,9 @@ iconImg.style.cssText = `
 iconImg.id = "softcom-header-icon";
 
 function injectIntoHeader() {
-  const header = getElementByXPath(headerXPath);
+  const header = getElementByXPath(
+    clienteSatisfeitoHTMLIdentifiers.headerXPath
+  );
   if (!header) return;
 
   // Evita duplicação
@@ -59,32 +55,36 @@ function initHeaderInjection() {
 }
 
 function captureClientName() {
-  const chatClientNameElement = getElementByXPath(clientNameXPath);
-  if (!chatClientNameElement) {
+  const nameElement = getElementByXPath(
+    clienteSatisfeitoHTMLIdentifiers.clientNameXPath
+  );
+  if (!nameElement) {
     alert("Nome do cliente: elemento HTML não encontrado.");
     return null;
   }
-  return chatClientNameElement.innerHTML.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
+  return nameElement.innerHTML.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
 }
 
 function captureClientCode() {
-  const chatClientObservacoesElement = document.querySelector(
-    `[aria-label="${clientObservacoesAriaLabel}"]`
+  const observacoesElement = document.querySelector(
+    `[aria-label="${clienteSatisfeitoHTMLIdentifiers.clientObservacoesAriaLabel}"]`
   );
-  if (!chatClientObservacoesElement) {
+  if (!observacoesElement) {
     alert("Observações: elemento HTML não encontrado.");
     return null;
   }
-  return chatClientObservacoesElement.value.trim();
+  return observacoesElement.value.trim();
 }
 
 function captureClientPhone() {
-  const chatClientPhoneElement = getElementByXPath(clientPhoneXPath);
-  if (!chatClientPhoneElement) {
+  const phoneElement = getElementByXPath(
+    clienteSatisfeitoHTMLIdentifiers.clientPhoneXPath
+  );
+  if (!phoneElement) {
     alert("Telefone do cliente: elemento HTML não encontrado.");
     return null;
   }
-  return chatClientPhoneElement.innerHTML.trim();
+  return phoneElement.innerHTML.trim();
 }
 
 function captureCurrentClientInfo() {

@@ -13,18 +13,30 @@ function changeSelectedOption(selectElement, optionText) {
 // Escutar cliques dos botões vindos do popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   try {
-    const selectSupport = document.getElementById("suportes");
-    const selectSubject = document.getElementById("assunto");
-    const selectUser = document.getElementById("usuario_partner_id");
-    const textareaReason = getElementByXPath(
-      '//*[@id="filter"]/div[2]/div/form/div[7]/textarea'
+    const selectSupport = document.getElementById(
+      areaPartnerHTMLIdentifiers.suporteId
     );
+    const selectSubject = document.getElementById(
+      areaPartnerHTMLIdentifiers.assuntoId
+    );
+    const selectUser = document.getElementById(
+      areaPartnerHTMLIdentifiers.userId
+    );
+    const textareaReason = document.getElementsByName(
+      areaPartnerHTMLIdentifiers.motivoName
+    )[0];
+    const textAreaSolicitante = document.getElementsByName(
+      areaPartnerHTMLIdentifiers.solicitanteName
+    )[0];
+    const textAreaDDD = document.getElementsByName(
+      areaPartnerHTMLIdentifiers.dddName
+    )[0];
+    const textAreaFone = document.getElementsByName(
+      areaPartnerHTMLIdentifiers.foneName
+    )[0];
     const urgenteSwitch = getElementByXPath(
-      '//*[@id="filter"]/div[2]/div/form/div[18]/input'
+      areaPartnerHTMLIdentifiers.urgenteXPath
     );
-    const textAreaSolicitante = document.getElementsByName("Solicitante")[0];
-    const textAreaDDD = document.getElementsByName("txtDDDContato")[0];
-    const textAreaFone = document.getElementsByName("txtFoneContato")[0];
     if (
       !selectSupport ||
       !selectSubject ||
