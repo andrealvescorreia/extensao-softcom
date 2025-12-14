@@ -22,15 +22,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const urgenteSwitch = getElementByXPath(
       '//*[@id="filter"]/div[2]/div/form/div[18]/input'
     );
+    const textAreaSolicitante = document.getElementsByName("Solicitante")[0];
+    const textAreaDDD = document.getElementsByName("txtDDDContato")[0];
+    const textAreaFone = document.getElementsByName("txtFoneContato")[0];
     if (
       !selectSupport ||
       !selectSubject ||
       !selectUser ||
       !textareaReason ||
-      !urgenteSwitch
+      !urgenteSwitch ||
+      !textAreaSolicitante ||
+      !textAreaDDD ||
+      !textAreaFone
     ) {
       throw new Error("Elemento html não encontrado.");
     }
+    getCurrentClientInfo((clientInfo) => {
+      textAreaSolicitante.value = clientInfo.name;
+      const ddd = clientInfo.phone.slice(2, 4);
+      textAreaDDD.value = ddd;
+      const fone = clientInfo.phone.slice(4);
+      textAreaFone.value = fone;
+    });
     if (request.action === "sped") {
       textareaReason.value = "gerar SPED.";
       changeSelectedOption(selectSupport, "Partner");

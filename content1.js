@@ -2,6 +2,8 @@
 
 const clientNameXPath = "//*[@id='InfoCabecalhoChat']/div[1]";
 const clientObservacoesAriaLabel = "Observações";
+const clientPhoneXPath =
+  '//*[@id="q-app"]/div/div/div/div/div/div[3]/aside/div/div[1]/div[2]/div/div/div/div[1]/div/div/div[1]/div/div[2]/div[2]/span[1]';
 const headerXPath = '//*[@id="q-app"]/div/div/div/div/div/header/div';
 
 const btnOcorrencia = createButton(
@@ -62,7 +64,7 @@ function captureClientName() {
     alert("Nome do cliente: elemento HTML não encontrado.");
     return null;
   }
-  return chatClientNameElement.innerText.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
+  return chatClientNameElement.innerHTML.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
 }
 
 function captureClientCode() {
@@ -70,17 +72,29 @@ function captureClientCode() {
     `[aria-label="${clientObservacoesAriaLabel}"]`
   );
   if (!chatClientObservacoesElement) {
-    alert("Código do cliente: elemento HTML não encontrado.");
+    alert("Observações: elemento HTML não encontrado.");
     return null;
   }
   return chatClientObservacoesElement.value.trim();
 }
 
+function captureClientPhone() {
+  const chatClientPhoneElement = getElementByXPath(clientPhoneXPath);
+  if (!chatClientPhoneElement) {
+    alert("Telefone do cliente: elemento HTML não encontrado.");
+    return null;
+  }
+  return chatClientPhoneElement.innerHTML.trim();
+}
+
 function captureCurrentClientInfo() {
-  return {
+  const client = {
     name: captureClientName(),
     code: captureClientCode(),
+    phone: captureClientPhone(),
   };
+  setCurrentClientInfo(client);
+  return client;
 }
 
 btnOcorrencia.addEventListener("click", () => {
