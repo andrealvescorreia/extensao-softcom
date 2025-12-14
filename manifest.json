@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "ClienteSatisfeito + AreaPartner",
+  "name": "ClienteSatisfeito + AreaPartner SOFTCOM",
   "version": "1.0",
   "description": "Automatiza processos repetitivos.",
   "permissions": ["scripting", "storage"],
@@ -13,7 +13,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "ClienteSatisfeito + AreaPartner",
+    "default_title": "ClienteSatisfeito + AreaPartner SOFTCOM",
     "default_icon": "icon.png"
   },
   "content_scripts": [
