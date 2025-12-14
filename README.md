@@ -17,5 +17,5 @@ Esta extensão foi criada visando facilitar e agilizar processos repetitivos no 
 
 ### Limitações Conhecidas
 
-- Funções de "Criar Ocorrência" e "Ver Cliente" precisam que o código do cliente tenha sido previamente preenchido no campo Observações no chat Cliente Satisfeito.
+- Funções de "Criar Ocorrência" e "Ver Cliente" precisam que o código do cliente tenha sido previamente preenchido no campo Observações do chat Cliente Satisfeito.
 - Essa extensão obtem informações e manipula elementos HTML de ambas as páginas. Caso os desenvolvedores do ClienteSatisfeito ou da Área Partner alterem algo nas estruturas respectivas, a extensão pode parar de funcionar a qualquer momento e exigir um patch de correção.

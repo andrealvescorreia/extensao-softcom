@@ -19,12 +19,12 @@
   "content_scripts": [
     {
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
-      "js": ["utils.js", "current-client.js", "content1.js"],
+      "js": ["utils.js", "current-client.js", "content-chat.js"],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://areapartner.softcomsistemas.com.br/*"],
-      "js": ["utils.js", "current-client.js", "content2.js"],
+      "js": ["utils.js", "current-client.js", "content-partner.js"],
       "run_at": "document_idle"
     }
   ],
