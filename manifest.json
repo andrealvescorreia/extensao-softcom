@@ -19,7 +19,12 @@
   "content_scripts": [
     {
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
-      "js": ["utils.js", "current-client.js", "content-chat.js"],
+      "js": [
+        "utils.js",
+        "current-client.js",
+        "components/button.js",
+        "content-chat.js"
+      ],
       "run_at": "document_idle"
     },
     {
@@ -30,7 +35,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icon.png", "components/*"],
+      "resources": ["icon.png"],
       "matches": ["<all_urls>"]
     }
   ]
