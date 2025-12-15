@@ -10,6 +10,42 @@ function changeSelectedOption(selectElement, optionText) {
   selectElement.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+function solicitanteInfoFromUrl() {
+  const textAreaSolicitante = document.getElementsByName(
+    areaPartnerHTMLIdentifiers.solicitanteName
+  )[0];
+  if (!textAreaSolicitante) {
+    alert("Nome do solicitante: elemento HTML não encontrado.");
+    return;
+  }
+  const textAreaDDD = document.getElementsByName(
+    areaPartnerHTMLIdentifiers.dddName
+  )[0];
+  if (!textAreaDDD) {
+    alert("DDD: elemento HTML não encontrado.");
+    return;
+  }
+  const textAreaFone = document.getElementsByName(
+    areaPartnerHTMLIdentifiers.foneName
+  )[0];
+  if (!textAreaFone) {
+    alert("Fone: elemento HTML não encontrado.");
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const clientName = params.get("name");
+  textAreaSolicitante.value = clientName ? decodeURIComponent(clientName) : "";
+  const phone = params.get("phone")
+    ? decodeURIComponent(params.get("phone"))
+    : "";
+  const ddd = phone.slice(2, 4);
+  textAreaDDD.value = ddd;
+  const fone = phone.slice(4);
+  textAreaFone.value = fone;
+}
+solicitanteInfoFromUrl();
+
 // Escutar cliques dos botões vindos do popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   try {
@@ -25,15 +61,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const textareaReason = document.getElementsByName(
       areaPartnerHTMLIdentifiers.motivoName
     )[0];
-    const textAreaSolicitante = document.getElementsByName(
-      areaPartnerHTMLIdentifiers.solicitanteName
-    )[0];
-    const textAreaDDD = document.getElementsByName(
-      areaPartnerHTMLIdentifiers.dddName
-    )[0];
-    const textAreaFone = document.getElementsByName(
-      areaPartnerHTMLIdentifiers.foneName
-    )[0];
+
     const urgenteSwitch = getElementByXPath(
       areaPartnerHTMLIdentifiers.urgenteXPath
     );
@@ -42,20 +70,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       !selectSubject ||
       !selectUser ||
       !textareaReason ||
-      !urgenteSwitch ||
-      !textAreaSolicitante ||
-      !textAreaDDD ||
-      !textAreaFone
+      !urgenteSwitch
     ) {
       throw new Error("Elemento html não encontrado.");
     }
-    getCurrentClientInfo((clientInfo) => {
-      textAreaSolicitante.value = clientInfo.name;
-      const ddd = clientInfo.phone.slice(2, 4);
-      textAreaDDD.value = ddd;
-      const fone = clientInfo.phone.slice(4);
-      textAreaFone.value = fone;
-    });
+
     if (request.action === "sped") {
       textareaReason.value = "gerar SPED.";
       changeSelectedOption(selectSupport, "Partner");

@@ -93,7 +93,6 @@ function captureCurrentClientInfo() {
     code: captureClientCode(),
     phone: captureClientPhone(),
   };
-  setCurrentClientInfo(client);
   return client;
 }
 
@@ -104,7 +103,11 @@ btnOcorrencia.addEventListener("click", () => {
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  const url = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${currentClientInfo.code}`;
+  const url = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
+    currentClientInfo.code
+  }?name=${encodeURIComponent(
+    currentClientInfo.name
+  )}&phone=${encodeURIComponent(currentClientInfo.phone)}`;
   btnOcorrencia.href = url;
 });
 

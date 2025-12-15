@@ -21,7 +21,7 @@
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
       "js": [
         "utils.js",
-        "current-client.js",
+
         "components/button.js",
         "html-identifiers.js",
         "content-chat.js"
@@ -30,12 +30,7 @@
     },
     {
       "matches": ["https://areapartner.softcomsistemas.com.br/*"],
-      "js": [
-        "utils.js",
-        "current-client.js",
-        "html-identifiers.js",
-        "content-partner.js"
-      ],
+      "js": ["utils.js", "html-identifiers.js", "content-partner.js"],
       "run_at": "document_idle"
     }
   ],
