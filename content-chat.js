@@ -125,10 +125,10 @@ btnVerCliente.addEventListener("click", () => {
 // Escutar cliques dos botões vindos do popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   try {
-    const clientInfo = captureCurrentClientInfo();
+    const clientName = captureClientName();
 
     if (request.action === "searchButtonClicked") {
-      const nameParts = clientInfo.name.split(" ");
+      const nameParts = clientName.split(" ");
       nameParts.shift();
       if (nameParts[0] === "-") nameParts.shift();
 
@@ -139,7 +139,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else if (request.action === "searchButtonFullNameClicked") {
       sendResponse({
         success: true,
-        clientName: clientInfo.name,
+        clientName: clientName,
       });
     }
   } catch (error) {
