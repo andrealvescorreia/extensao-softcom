@@ -29,7 +29,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://areapartner.softcomsistemas.com.br/*"],
+      "matches": ["https://areapartner.softcomsistemas.com.br/agenda/form/*"],
       "js": ["utils.js", "html-identifiers.js", "content-partner.js"],
       "run_at": "document_idle"
     }
