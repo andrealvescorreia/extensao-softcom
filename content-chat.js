@@ -99,7 +99,7 @@ function captureCurrentClientInfo() {
 btnOcorrencia.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnOcorrencia.href = undefined;
+    btnVerCliente.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
@@ -114,7 +114,7 @@ btnOcorrencia.addEventListener("click", () => {
 btnVerCliente.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerCliente.href = undefined;
+    btnVerCliente.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
