@@ -12,6 +12,12 @@ const btnVerCliente = createButton(
   pencilSVG
 );
 
+const btnVerProspectado = createButton(
+  "softcom-ver-prospectado-btn",
+  "Ver Prospectado",
+  pencilSVG
+);
+
 const iconImg = document.createElement("img");
 iconImg.src = chrome.runtime.getURL("icon.png");
 iconImg.alt = "Softcom Extensão";
@@ -38,6 +44,9 @@ function injectIntoHeader() {
   }
   if (!document.getElementById("softcom-ver-cliente-btn")) {
     header.insertBefore(btnVerCliente, header.children[3]);
+  }
+  if (!document.getElementById("softcom-ver-prospectado-btn")) {
+    header.insertBefore(btnVerProspectado, header.children[4]);
   }
 }
 
@@ -120,6 +129,19 @@ btnVerCliente.addEventListener("click", () => {
   }
   const url = `https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/${currentClientInfo.code}`;
   btnVerCliente.href = url;
+});
+
+btnVerProspectado.addEventListener("click", () => {
+  const currentClientInfo = captureCurrentClientInfo();
+  if (currentClientInfo.code === "") {
+    btnVerProspectado.href = `https://areapartner.softcomsistemas.com.br/comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
+    alert(
+      "Código do prospectado não encontrado. Insira o código nas observações."
+    );
+    return;
+  }
+  const url = `https://areapartner.softcomsistemas.com.br/comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
+  btnVerProspectado.href = url;
 });
 
 // Escutar cliques dos botões vindos do popup
