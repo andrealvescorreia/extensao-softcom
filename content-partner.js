@@ -43,6 +43,13 @@ function solicitanteInfoFromUrl() {
   textAreaDDD.value = ddd;
   const fone = phone.slice(4);
   textAreaFone.value = fone;
+  const selectSubject = document.getElementById(
+    areaPartnerHTMLIdentifiers.assuntoId
+  );
+  if (selectSubject) {
+    const selected = decodeURIComponent(params.get("assunto"));
+    changeSelectedOption(selectSubject, selected);
+  }
 }
 solicitanteInfoFromUrl();
 

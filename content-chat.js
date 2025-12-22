@@ -116,7 +116,7 @@ btnOcorrencia.addEventListener("click", () => {
     currentClientInfo.code
   }?name=${encodeURIComponent(
     currentClientInfo.name
-  )}&phone=${encodeURIComponent(currentClientInfo.phone)}`;
+  )}&phone=${encodeURIComponent(currentClientInfo.phone)}&assunto=TEC REMOTO`;
   btnOcorrencia.href = url;
 });
 
