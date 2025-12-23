@@ -108,7 +108,7 @@ function captureCurrentClientInfo() {
 btnOcorrencia.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerCliente.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnOcorrencia.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
