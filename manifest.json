@@ -30,7 +30,12 @@
     },
     {
       "matches": ["https://areapartner.softcomsistemas.com.br/agenda/form/*"],
-      "js": ["utils.js", "html-identifiers.js", "content-partner.js"],
+      "js": ["utils.js", "html-identifiers.js", "content-partner-form.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://areapartner.softcomsistemas.com.br/"],
+      "js": ["content-partner.js"],
       "run_at": "document_idle"
     }
   ],
