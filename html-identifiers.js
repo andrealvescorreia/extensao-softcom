@@ -21,4 +21,5 @@ const areaPartnerHTMLIdentifiers = {
   servicoRealizadoName: "ServiçoRealizado",
   urgenteXPath: '//*[@id="filter"]/div[2]/div/form/div[18]/input',
   IsXPath: "//*[@id='filter']/div[2]/div/form/div[19]/input",
+  cnpjName: "cnpj",
 };
