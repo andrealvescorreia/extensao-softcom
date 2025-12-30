@@ -28,6 +28,9 @@ iconImg.style.cssText = `
   cursor: pointer;
 `;
 iconImg.id = "softcom-header-icon";
+iconImg.onclick = () => {
+  window.open("https://areapartner.softcomsistemas.com.br/", "_blank");
+};
 
 function injectIntoHeader() {
   const header = getElementByXPath(
