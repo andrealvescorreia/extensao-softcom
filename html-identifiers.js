@@ -22,4 +22,5 @@ const areaPartnerHTMLIdentifiers = {
   urgenteXPath: '//*[@id="filter"]/div[2]/div/form/div[18]/input',
   IsXPath: "//*[@id='filter']/div[2]/div/form/div[19]/input",
   cnpjName: "cnpj",
+  identificacaoLiXPath: "/html/body/div[1]/main/div[2]/div[2]/ul/li[1]",
 };
