@@ -1,8 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "ClienteSatisfeito + AreaPartner SOFTCOM",
-  "version": "1.0",
-  "description": "Automatiza processos repetitivos.",
+  "name": "Extensão SOFTCOM",
+  "version": "1.0.1",
+  "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos repetitivos.",
+  "icons": {
+    "512": "icon.png",
+    "128": "icon128x128.png"
+  },
   "permissions": ["scripting", "storage"],
   "host_permissions": [
     "https://areapartner.softcomsistemas.com.br/*",
@@ -34,7 +38,9 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/*"],
+      "matches": [
+        "https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/*"
+      ],
       "js": ["utils.js", "html-identifiers.js", "content-partner-client.js"],
       "run_at": "document_idle"
     },
