@@ -34,4 +34,4 @@ Para contatos no Cliente Satisfeito que estão relacionados a múltiplos cliente
 
 ### Limitações Conhecidas
 
-- A extensão depende da estrutura HTML das páginas do ClienteSatisfeito e da Área Partner. Alterações nessas plataformas podem causar mau funcionamento, exigindo atualizações corretivas. Os seletores HTML utilizados estão disponíveis em `html-identifiers.js`.
+- A extensão depende da estrutura HTML das páginas do ClienteSatisfeito e da Área Partner. Alterações nessas plataformas podem causar mau funcionamento, exigindo atualizações corretivas. Os seletores HTML utilizados estão disponíveis em `html-selectors.js`.

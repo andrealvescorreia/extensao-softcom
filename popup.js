@@ -1,9 +1,6 @@
 const searchButton = document.getElementById("searchButton");
 const searchButtonFullName = document.getElementById("searchButtonFullName");
 
-const sped = document.getElementById("sped");
-const apoio = document.getElementById("apoio");
-const useCapturedClient = document.getElementById("useCapturedClient");
 const clienteSatisfeitoSection = document.getElementById(
   "cliente-satisfeito-section"
 );
@@ -69,17 +66,3 @@ searchButton.addEventListener("click", () => {
 searchButtonFullName.addEventListener("click", () => {
   handleAction("searchButtonFullNameClicked", "chat.clientesatisfeito.com.br");
 });
-
-sped.addEventListener("click", () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    handleAction("sped", "areapartner.softcomsistemas.com.br");
-  });
-});
-
-apoio.addEventListener("click", () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    handleAction("apoio", "areapartner.softcomsistemas.com.br");
-  });
-});
-
-useCapturedClient.addEventListener("change", () => {});

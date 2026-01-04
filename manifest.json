@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Extensão SOFTCOM",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos.",
   "icons": {
     "512": "icon.png",
@@ -26,22 +26,28 @@
       "js": [
         "utils.js",
 
-        "components/button.js",
-        "html-identifiers.js",
+        "components/anchor-button.js",
+        "html-selectors.js",
         "content-chat.js"
       ],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://areapartner.softcomsistemas.com.br/agenda/form/*"],
-      "js": ["utils.js", "html-identifiers.js", "content-partner-form.js"],
+      "js": [
+        "utils.js",
+        "html-selectors.js",
+        "ocorrencia-predefinitions.js",
+        "components/button.js",
+        "content-partner-form.js"
+      ],
       "run_at": "document_idle"
     },
     {
       "matches": [
         "https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/*"
       ],
-      "js": ["utils.js", "html-identifiers.js", "content-partner-client.js"],
+      "js": ["utils.js", "html-selectors.js", "content-partner-client.js"],
       "run_at": "document_idle"
     },
     {

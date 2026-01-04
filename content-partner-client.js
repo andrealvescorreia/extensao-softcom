@@ -31,7 +31,7 @@ copyButton.appendChild(svgIconElement);
 
 function injectCopyButton() {
   const cnpjInput = document.getElementsByName(
-    areaPartnerHTMLIdentifiers.cnpjName
+    areaPartnerHTMLSelectors.cnpjName
   )[0];
 
   if (!cnpjInput) {
@@ -55,7 +55,7 @@ function injectCopyButton() {
 injectCopyButton();
 
 const identificacaoLi = getElementByXPath(
-  areaPartnerHTMLIdentifiers.identificacaoLiXPath
+  areaPartnerHTMLSelectors.identificacaoLiXPath
 );
 
 if (identificacaoLi) {

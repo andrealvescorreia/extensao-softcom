@@ -1,18 +1,18 @@
 // CLIENTE SATISFEITO
 
-const btnOcorrencia = createButton(
+const btnOcorrencia = createAnchorButton(
   "softcom-ocorrencia-btn",
   "Criar Ocorrência",
   journalPlusSVG
 );
 
-const btnVerCliente = createButton(
+const btnVerCliente = createAnchorButton(
   "softcom-ver-cliente-btn",
   "Ver Cliente",
   pencilSVG
 );
 
-const btnVerProspectado = createButton(
+const btnVerProspectado = createAnchorButton(
   "softcom-ver-prospectado-btn",
   "Ver Prospectado",
   pencilSVG
@@ -33,9 +33,7 @@ iconImg.onclick = () => {
 };
 
 function injectIntoHeader() {
-  const header = getElementByXPath(
-    clienteSatisfeitoHTMLIdentifiers.headerXPath
-  );
+  const header = getElementByXPath(clienteSatisfeitoHTMLSelectors.headerXPath);
   if (!header) return;
 
   // Evita duplicação
@@ -68,7 +66,7 @@ function initHeaderInjection() {
 
 function captureClientName() {
   const nameElement = getElementByXPath(
-    clienteSatisfeitoHTMLIdentifiers.clientNameXPath
+    clienteSatisfeitoHTMLSelectors.clientNameXPath
   );
   if (!nameElement) {
     alert("Nome do cliente: elemento HTML não encontrado.");
@@ -79,7 +77,7 @@ function captureClientName() {
 
 function captureClientCode() {
   const observacoesElement = document.querySelector(
-    `[aria-label="${clienteSatisfeitoHTMLIdentifiers.clientObservacoesAriaLabel}"]`
+    `[aria-label="${clienteSatisfeitoHTMLSelectors.clientObservacoesAriaLabel}"]`
   );
   if (!observacoesElement) {
     alert("Observações: elemento HTML não encontrado.");
@@ -112,7 +110,7 @@ function captureClientCode() {
 
 function captureClientPhone() {
   const phoneElement = getElementByXPath(
-    clienteSatisfeitoHTMLIdentifiers.clientPhoneXPath
+    clienteSatisfeitoHTMLSelectors.clientPhoneXPath
   );
   if (!phoneElement) {
     alert("Telefone do cliente: elemento HTML não encontrado.");

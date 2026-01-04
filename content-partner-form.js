@@ -12,21 +12,21 @@ function changeSelectedOption(selectElement, optionText) {
 
 function solicitanteInfoFromUrl() {
   const textAreaSolicitante = document.getElementsByName(
-    areaPartnerHTMLIdentifiers.solicitanteName
+    areaPartnerHTMLSelectors.solicitanteName
   )[0];
   if (!textAreaSolicitante) {
     alert("Nome do solicitante: elemento HTML não encontrado.");
     return;
   }
   const textAreaDDD = document.getElementsByName(
-    areaPartnerHTMLIdentifiers.dddName
+    areaPartnerHTMLSelectors.dddName
   )[0];
   if (!textAreaDDD) {
     alert("DDD: elemento HTML não encontrado.");
     return;
   }
   const textAreaFone = document.getElementsByName(
-    areaPartnerHTMLIdentifiers.foneName
+    areaPartnerHTMLSelectors.foneName
   )[0];
   if (!textAreaFone) {
     alert("Fone: elemento HTML não encontrado.");
@@ -44,7 +44,7 @@ function solicitanteInfoFromUrl() {
   const fone = phone.slice(4);
   textAreaFone.value = fone;
   const selectSubject = document.getElementById(
-    areaPartnerHTMLIdentifiers.assuntoId
+    areaPartnerHTMLSelectors.assuntoId
   );
   if (selectSubject) {
     const selected = decodeURIComponent(params.get("assunto"));
@@ -53,58 +53,91 @@ function solicitanteInfoFromUrl() {
 }
 solicitanteInfoFromUrl();
 
-// Escutar cliques dos botões vindos do popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+function applyPredefinition(pred) {
   try {
-    const selectSupport = document.getElementById(
-      areaPartnerHTMLIdentifiers.suporteId
-    );
-    const selectSubject = document.getElementById(
-      areaPartnerHTMLIdentifiers.assuntoId
-    );
-    const selectUser = document.getElementById(
-      areaPartnerHTMLIdentifiers.userId
-    );
-    const textareaReason = document.getElementsByName(
-      areaPartnerHTMLIdentifiers.motivoName
-    )[0];
+    const selectors = areaPartnerHTMLSelectors;
+    const elements = {
+      support: document.getElementById(selectors.suporteId),
+      subject: document.getElementById(selectors.assuntoId),
+      user: document.getElementById(selectors.usuarioPartnerId),
+      reason: document.getElementsByName(selectors.motivoName)[0],
+      urgent: getElementByXPath(selectors.urgenteXPath),
+      is: getElementByXPath(selectors.IsXPath),
+      workDone: document.getElementsByName(selectors.servicoRealizadoName)[0],
+      module: document.getElementsByName(selectors.moduloName)[0],
+      example: document.getElementsByName(selectors.exemploName)[0],
+    };
 
-    const urgenteSwitch = getElementByXPath(
-      areaPartnerHTMLIdentifiers.urgenteXPath
-    );
     if (
-      !selectSupport ||
-      !selectSubject ||
-      !selectUser ||
-      !textareaReason ||
-      !urgenteSwitch
+      !elements.support ||
+      !elements.subject ||
+      !elements.user ||
+      !elements.reason ||
+      !elements.urgent ||
+      !elements.is ||
+      !elements.workDone
     ) {
       throw new Error("Elemento html não encontrado.");
     }
 
-    if (request.action === "sped") {
-      textareaReason.value = "gerar SPED.";
-      changeSelectedOption(selectSupport, "Partner");
-      changeSelectedOption(selectSubject, "TEC SPED");
-      changeSelectedOption(selectUser, "[selecione]");
-    }
-    if (request.action === "apoio") {
-      textareaReason.value =
-        "DEMANDA ENCAMINHADA PARA A MATRIZ POIS ESTAMOS COM A EQUIPE TÉC. REDUZDA E SEM O TEC. INTERNO NO MOMENTO.";
-
-      changeSelectedOption(selectSupport, "Apoio Tecnico");
-      changeSelectedOption(selectSubject, "APOIO");
-      changeSelectedOption(selectUser, "[selecione]");
-      !urgenteSwitch.checked ? urgenteSwitch.click() : null;
-    }
+    if (pred.motivo !== undefined) elements.reason.value = pred.motivo;
+    if (pred.suporte !== undefined)
+      changeSelectedOption(elements.support, pred.suporte);
+    if (pred.assunto !== undefined)
+      changeSelectedOption(elements.subject, pred.assunto);
+    if (pred.usuarioPartner !== undefined)
+      changeSelectedOption(elements.user, pred.usuarioPartner);
+    if (pred.urgente !== undefined && pred.urgente !== elements.urgent.checked)
+      elements.urgent.click();
+    if (pred.is !== undefined && pred.is !== elements.is.checked)
+      elements.is.click();
+    if (pred.servicoRealizado !== undefined)
+      elements.workDone.value = pred.servicoRealizado;
+    if (pred.modulo !== undefined) elements.module.value = pred.modulo;
+    if (pred.exemplo !== undefined) elements.example.value = pred.exemplo;
   } catch (error) {
-    console.error("[Content2] Erro ao processar ação:", error);
-    sendResponse({
-      success: false,
-      message: "Erro ao processar ação",
-      error: error.message,
-    });
+    console.error(
+      "[Content-Predefinições] Erro ao aplicar predefinição:",
+      error
+    );
+    alert("Erro ao aplicar predefinição: " + error.message);
   }
+}
 
-  return true;
+let buttons = [];
+ocorrenciaPredefinitions.forEach((pred) => {
+  const btn = createButton(pred.name + "PredefinitionBtn", pred.name);
+  btn.onclick = () => applyPredefinition(pred);
+  buttons.push(btn);
 });
+
+const predefiniitonsContainer = document.createElement("div");
+predefiniitonsContainer.class = "panel-body";
+buttons.forEach((btn) => predefiniitonsContainer.appendChild(btn));
+
+const accordion = document.getElementById(areaPartnerHTMLSelectors.accordionId);
+if (accordion) {
+  const newElement = document.createElement("div");
+  newElement.className = "accordion-item";
+  const collapseFour = document.createElement("div");
+  collapseFour.id = "collapseFour";
+  collapseFour.className = "panel-collapse collapse";
+  collapseFour.setAttribute("role", "tabpanel");
+  collapseFour.setAttribute("aria-labelledby", "headingFour");
+  collapseFour.appendChild(predefiniitonsContainer);
+
+  newElement.innerHTML = `
+    
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingFour">
+      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+        <h4 class="panel-title">Predefinições
+          <img width="18" src="img/menu_down.png" align="right">
+        </h4>
+      </a>
+      </div>
+    </div>
+  `;
+  newElement.appendChild(collapseFour);
+  accordion.appendChild(newElement);
+}

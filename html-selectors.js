@@ -1,4 +1,4 @@
-const clienteSatisfeitoHTMLIdentifiers = {
+const clienteSatisfeitoHTMLSelectors = {
   headerXPath: "//*[@id='q-app']/div/div/div/div/div/header/div",
   clientNameXPath: "//*[@id='InfoCabecalhoChat']/div[1]",
   clientPhoneXPath:
@@ -6,13 +6,14 @@ const clienteSatisfeitoHTMLIdentifiers = {
   clientObservacoesAriaLabel: "Observações",
 };
 
-const areaPartnerHTMLIdentifiers = {
+const areaPartnerHTMLSelectors = {
+  accordionId: "accordion",
   solicitanteName: "Solicitante",
   dddName: "txtDDDContato",
   foneName: "txtFoneContato",
   suporteId: "suportes",
   assuntoId: "assunto",
-  userId: "usuario_partner_id",
+  usuarioPartnerId: "usuario_partner_id",
   motivoName: "Motivo",
   moduloName: "modulo",
   exemploName: "exemplo",
