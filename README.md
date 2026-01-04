@@ -1,12 +1,15 @@
-## Extensão Softcom Suporte: ClienteSatisfeito + Área Partner
+## Extensão Softcom Patos
 
-Esta extensão foi criada visando facilitar e agilizar processos repetitivos no suporte da Softcom em Patos, vom o objetivo de integrar o chat do ClienteSatisfeito com a Área Partner Softcom.
+Esta extensão integra o Cliente Satisfeito – ferramenta de chat utilizada na Softcom Patos – com a Área Partner, automatizando processos e otimizando a experiência de uso.
 
 ### Funcionalidades
 
-- Abertura rápida de nova ocorrência e visualização de informações do cliente atual do chat na área Partner.
-- Pesquisa rápida do cliente atual do chat por nome.
-- Inserção automática de valores padrão em formulários de criação de ocorrências na área Partner, incluindo predefinições para SPED e encaminhamento ao Apoio Técnico da matriz.
+- Ver cliente atual do chat na área partner;
+- Ver prospectado atual do chat na área partner;
+- Criar ocorrência para o cliente atual do chat, inserindo automáticamente nome e telefone no formulário;
+- Preenchimento automático do formulário de ocorrência, com predefinições para SPED e para encaminhar para a matriz;
+- Botão de copiar os digitos do CNPJ do cliente na área partner;
+- "Poços" de tamanho maior na área partner, facilitando visualização das ocorrências e deixando a tela mais limpa.
 
 ### Instalação
 
@@ -15,7 +18,20 @@ Esta extensão foi criada visando facilitar e agilizar processos repetitivos no 
 3. Clique em **Carregar sem compactação** e selecione a pasta desse projeto.
 4. Atualize qualquer página que você já tenha aberto (do cliente satisfeito ou área partner) para que a extensão seja carregada corretamente.
 
+**Vídeo tutorial:**
+[Como instalar](docs/como-instalar.mp4).
+
+### Guia de uso
+
+Para fazer a integração entre o Cliente Satisfeito e a Área Partner, é preciso pegar o **código** do cliente na área partner e inseri-lo nas **observações** do cliente no Cliente Satisfeito.
+
+![Código cliente área partner](docs/codigo-area-partner.png)
+
+![Observações cliente satisfeito](docs/observacoes-cliente-satisfeito.png)
+
+Para contatos no Cliente Satisfeito que estão relacionados a múltiplos clientes – contabilidade, por exemplo – é possível inserir mais de um código nas observações, que devem ser separados por uma quebra de linha e podem ser seguidos pelo nome do cliente após um espaço, para facilitar a sua identificação.
+![Multiloja](docs/cliente-multiloja.png)
+
 ### Limitações Conhecidas
 
-- Funções de "Criar Ocorrência" e "Ver Cliente" precisam que o código do cliente tenha sido previamente preenchido no campo Observações do chat Cliente Satisfeito.
-- Essa extensão obtem informações e manipula elementos HTML de ambas as páginas. Caso os desenvolvedores do ClienteSatisfeito ou da Área Partner alterem algo nas estruturas respectivas, a extensão pode parar de funcionar a qualquer momento e exigir um patch de correção.
+- A extensão depende da estrutura HTML das páginas do ClienteSatisfeito e da Área Partner. Alterações nessas plataformas podem causar mau funcionamento, exigindo atualizações corretivas. Os seletores HTML utilizados estão disponíveis em `html-identifiers.js`.
