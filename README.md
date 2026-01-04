@@ -19,7 +19,7 @@ Esta extensão integra o Cliente Satisfeito – ferramenta de chat utilizada na 
 4. Atualize qualquer página que você já tenha aberto (do cliente satisfeito ou área partner) para que a extensão seja carregada corretamente.
 
 **Vídeo tutorial:**
-[Como instalar](docs/como-instalar.mp4).
+[Como instalar](docs/COMO-INSTALAR.mp4).
 
 ### Guia de uso
 
