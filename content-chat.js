@@ -85,7 +85,29 @@ function captureClientCode() {
     alert("Observações: elemento HTML não encontrado.");
     return null;
   }
-  return observacoesElement.value.trim();
+
+  const text = observacoesElement.value.trim();
+  if (text.includes("\n")) {
+    const lines = text.split("\n");
+    const choice = prompt(
+      "Foram encontradas múltiplas linhas nas observações. Insira o número da linha que contém o código do cliente:\n" +
+        lines.map((line, index) => `${index + 1}: ${line}`).join("\n"),
+      "1"
+    );
+    if (choice !== null) {
+      const lineNumber = parseInt(choice, 10);
+      if (!isNaN(lineNumber) && lineNumber > 0 && lineNumber <= lines.length) {
+        return lines[lineNumber - 1].trim();
+      } else {
+        alert("Número de linha inválido.");
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  return text;
 }
 
 function captureClientPhone() {
@@ -115,12 +137,11 @@ btnOcorrencia.addEventListener("click", () => {
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  const url = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
+  btnOcorrencia.href = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
     currentClientInfo.name
   )}&phone=${encodeURIComponent(currentClientInfo.phone)}&assunto=TEC REMOTO`;
-  btnOcorrencia.href = url;
 });
 
 btnVerCliente.addEventListener("click", () => {
