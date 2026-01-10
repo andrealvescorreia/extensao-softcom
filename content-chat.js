@@ -8,6 +8,10 @@ function isDarkModeActive() {
   return Boolean(document.querySelector(".body--dark"));
 }
 
+function isOnAtendimentoPage() {
+  return window.location.href.toLowerCase().includes("atendimento");
+}
+
 const btnOcorrencia = createAnchorButton(
   "softcom-ocorrencia-btn",
   "Criar Ocorrência",
@@ -32,6 +36,15 @@ function applyStyleMode() {
   btnVerCliente.classList.toggle("dark-mode", isDarkMode);
   btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
 }
+
+function toggleButtonsVisibility() {
+  const isAtendimento = isOnAtendimentoPage();
+  btnOcorrencia.style.display = isAtendimento ? "flex" : "none";
+  btnVerCliente.style.display = isAtendimento ? "flex" : "none";
+  btnVerProspectado.style.display = isAtendimento ? "flex" : "none";
+}
+
+toggleButtonsVisibility();
 applyStyleMode();
 
 // Observer para monitorar mudanças no modo escuro
@@ -44,6 +57,28 @@ function observeDarkModeChanges() {
   observer.observe(bodyElement, {
     attributes: true,
     attributeFilter: ["class"],
+  });
+}
+
+// Observer para monitorar mudanças na URL (para SPAs)
+function observeUrlChanges() {
+  let lastUrl = window.location.href;
+
+  const observer = new MutationObserver(() => {
+    if (lastUrl !== window.location.href) {
+      lastUrl = window.location.href;
+      toggleButtonsVisibility();
+    }
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+
+  // Também monitora popstate para mudanças de URL
+  window.addEventListener("popstate", () => {
+    toggleButtonsVisibility();
   });
 }
 
@@ -93,6 +128,7 @@ function initHeaderInjection() {
   const run = () => {
     injectIntoHeader();
     observeDarkModeChanges();
+    observeUrlChanges();
   };
 
   if (document.readyState === "loading") {
