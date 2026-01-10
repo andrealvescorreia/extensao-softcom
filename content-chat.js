@@ -47,19 +47,27 @@ function observeDarkModeChanges() {
   });
 }
 
-const iconImg = document.createElement("img");
-iconImg.src = chrome.runtime.getURL("icon.png");
-iconImg.alt = "Softcom Extensão";
+const iconImg = document.createElement("a");
+iconImg.id = "softcom-header-icon";
+iconImg.href = "https://areapartner.softcomsistemas.com.br/";
+iconImg.target = "_blank";
+iconImg.rel = "noopener noreferrer";
 iconImg.style.cssText = `
+  margin-left: 8px;
+  margin-right: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const img = document.createElement("img");
+img.src = chrome.runtime.getURL("icon.png");
+img.alt = "Softcom Extensão";
+img.style.cssText = `
   width: 32px;
   height: 32px;
-  margin-left: 8px;
-  cursor: pointer;
 `;
-iconImg.id = "softcom-header-icon";
-iconImg.onclick = () => {
-  window.open("https://areapartner.softcomsistemas.com.br/", "_blank");
-};
+iconImg.appendChild(img);
 
 function injectIntoHeader() {
   const header = getElementByXPath(clienteSatisfeitoHTMLSelectors.headerXPath);
