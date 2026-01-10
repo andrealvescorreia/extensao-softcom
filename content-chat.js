@@ -1,5 +1,13 @@
 // CLIENTE SATISFEITO
 
+function isDarkModeActive() {
+  const target = document.body || document.documentElement;
+  if (!target) return false;
+
+  if (target.classList.contains("body--dark")) return true;
+  return Boolean(document.querySelector(".body--dark"));
+}
+
 const btnOcorrencia = createAnchorButton(
   "softcom-ocorrencia-btn",
   "Criar Ocorrência",
@@ -17,6 +25,27 @@ const btnVerProspectado = createAnchorButton(
   "Ver Prospectado",
   pencilSVG
 );
+
+function applyStyleMode() {
+  const isDarkMode = isDarkModeActive();
+  btnOcorrencia.classList.toggle("dark-mode", isDarkMode);
+  btnVerCliente.classList.toggle("dark-mode", isDarkMode);
+  btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
+}
+applyStyleMode();
+
+// Observer para monitorar mudanças no modo escuro
+function observeDarkModeChanges() {
+  const bodyElement = document.body || document.documentElement;
+  const observer = new MutationObserver(() => {
+    applyStyleMode();
+  });
+
+  observer.observe(bodyElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+}
 
 const iconImg = document.createElement("img");
 iconImg.src = chrome.runtime.getURL("icon.png");
@@ -53,7 +82,10 @@ function injectIntoHeader() {
 
 // Executa quando o DOM estiver pronto
 function initHeaderInjection() {
-  const run = () => injectIntoHeader();
+  const run = () => {
+    injectIntoHeader();
+    observeDarkModeChanges();
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run, { once: true });

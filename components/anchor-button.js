@@ -1,45 +1,72 @@
+const ANCHOR_BUTTON_STYLE_ID = "softcom-anchor-button-style";
+
+function ensureAnchorButtonStyles() {
+  if (document.getElementById(ANCHOR_BUTTON_STYLE_ID)) return;
+
+  const style = document.createElement("style");
+  style.id = ANCHOR_BUTTON_STYLE_ID;
+  style.textContent = `
+    .softcom-anchor-button {
+      z-index: 1000;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 8px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-direction: row-reverse;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+    }
+    .softcom-anchor-button {
+      border: 2px solid #222;
+      background: #ffd968;
+      color: #000000ff;
+    }
+
+    .softcom-anchor-button.dark-mode {
+      border: 2px solid #b38600;
+      background: #000;
+      color: #ffc107;
+    }
+
+    .softcom-anchor-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(15, 13, 8, 0.15);
+    }
+
+    .softcom-anchor-button svg {
+      width: 15px;
+      height: 15px;
+      fill: black;
+    }
+
+    .softcom-anchor-button.dark-mode svg {
+      fill: #ffc107;
+    }S
+  `;
+  document.head.appendChild(style);
+}
+
 function createAnchorButton(id, text, icon) {
+  ensureAnchorButtonStyles();
+
   const button = document.createElement("a");
   button.id = id;
   button.textContent = text;
-  button.style.cssText = `
-    z-index: 1000;
-    cursor: pointer;
-    text-decoration: none;
-    margin-left: 8px;
-    padding: 6px 10px;
-    border: 2px solid #b38600ff;
-    border-radius: 4px;
-    background: #000000ff; 
-    color: #FFC107;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex-direction: row-reverse;
-  `;
-
+  button.className = "softcom-anchor-button";
   button.target = "_blank";
   button.rel = "noopener noreferrer";
 
-  // Hover effects for btnOcorrencia
-  button.style.transition = "all 0.2s ease";
-  button.addEventListener("mouseenter", () => {
-    button.style.transform = "translateY(-1px)";
-    button.style.boxShadow = "0 4px 8px rgba(15, 13, 8, 0.15)";
-    button.style.backgroundColor = "#1a1410ff";
-  });
-  button.addEventListener("mouseleave", () => {
-    button.style.transform = "translateY(0)";
-    button.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-    button.style.backgroundColor = "#000000ff";
-  });
   if (icon !== undefined) {
-    const svgIconElement = document.createElement("img");
-    svgIconElement.src = "data:image/svg+xml;base64," + btoa(icon);
-
-    svgIconElement.style.width = "15px";
-    svgIconElement.style.height = "15px";
-    button.appendChild(svgIconElement);
+    const svgContainer = document.createElement("div");
+    svgContainer.innerHTML = icon;
+    const svgElement = svgContainer.querySelector("svg");
+    if (svgElement) {
+      button.appendChild(svgElement);
+    }
   }
 
   return button;
