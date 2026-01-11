@@ -21,9 +21,9 @@ function ensureAnchorButtonStyles() {
       transition: all 0.2s ease;
     }
     .softcom-anchor-button {
-      border: 2px solid #222;
-      background: #ffd968;
-      color: #000000ff;
+      border: 2px solid #b38600;
+      background: #fec400;
+      color: #000000;
     }
 
     .softcom-anchor-button.dark-mode {
