@@ -20,8 +20,37 @@ const btnOCFinalizada = createAnchorButton(
   checkSVG
 );
 
-btnOCFinalizada.title =
-  "Criar OC. já finalizada. Capta horário de chegada e saída a partir do histórico da conversa.";
+// Criar ícone de help com interrogação
+const helpIconOCFinalizada = document.createElement("span");
+helpIconOCFinalizada.innerText = "?";
+helpIconOCFinalizada.style.cssText = `
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: help;
+  position: absolute;
+  margin-top: -18px;
+  margin-right: -5px;
+  text-shadow:
+    -1px -1px 0 #000, 
+     1px -1px 0 #000,
+    -1px  1px 0 #000, 
+     1px  1px 0 #000;
+`;
+helpIconOCFinalizada.title = "Clique aqui para mais informações.";
+helpIconOCFinalizada.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  alert(`
+    Captura horários de chegada e saída da conversa atual para preencher no formulário da OC. Funciona tanto com mensagens enviadas quanto com notas internas.
+    O horário de chegada é identificado quando é usada uma das seguintes frases:
+    ${arrivalMessages.map((msg) => `\n- "${msg}"`).join("")}
+    O horário de saída é identificado quando é usada uma das seguintes frases:
+    ${departureMessages.map((msg) => `\n- "${msg}"`).join("")}
+    `);
+});
+btnOCFinalizada.appendChild(helpIconOCFinalizada);
 
 const btnVerCliente = createAnchorButton(
   "softcom-ver-cliente-btn",

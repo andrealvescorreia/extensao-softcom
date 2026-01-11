@@ -19,10 +19,11 @@ function ensureAnchorButtonStyles() {
       flex-direction: row-reverse;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.2s ease;
+      position: relative;
     }
     .softcom-anchor-button {
       border: 2px solid #b38600;
-      background: #fec400;
+      background: #fdd835;
       color: #000000;
     }
 
@@ -45,7 +46,7 @@ function ensureAnchorButtonStyles() {
 
     .softcom-anchor-button.dark-mode svg {
       fill: #ffc107;
-    }S
+    }
   `;
   document.head.appendChild(style);
 }
