@@ -26,12 +26,12 @@ helpIconOCFinalizada.innerText = "?";
 helpIconOCFinalizada.style.cssText = `
   align-items: center;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   cursor: help;
   position: absolute;
   margin-top: -18px;
-  margin-right: -5px;
+  margin-right: -6px;
   text-shadow:
     -1px -1px 0 #000, 
      1px -1px 0 #000,
