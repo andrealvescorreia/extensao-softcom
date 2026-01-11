@@ -23,12 +23,22 @@ function createButton(id, text) {
   button.addEventListener("mouseenter", () => {
     button.style.transform = "translateY(-1px)";
     button.style.boxShadow = "0 4px 8px rgba(15, 13, 8, 0.15)";
-    button.style.backgroundColor = "#f4f4f4ff";
+    button.style.backgroundColor = "#f3f3f3ff";
   });
   button.addEventListener("mouseleave", () => {
     button.style.transform = "translateY(0)";
     button.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
     button.style.backgroundColor = "#ffffffff";
+  });
+
+  // Click effect
+  button.addEventListener("mousedown", () => {
+    button.style.transform = "scale(0.95)";
+    button.style.boxShadow = "0 1px 2px rgba(0,0,0,0.2)";
+  });
+  button.addEventListener("mouseup", () => {
+    button.style.transform = "translateY(-1px)";
+    button.style.boxShadow = "0 4px 8px rgba(15, 13, 8, 0.15)";
   });
 
   return button;
