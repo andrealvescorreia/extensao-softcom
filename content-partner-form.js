@@ -32,6 +32,20 @@ function solicitanteInfoFromUrl() {
     alert("Fone: elemento HTML não encontrado.");
     return;
   }
+  const textAreaHoraChegada = document.getElementsByName(
+    areaPartnerHTMLSelectors.horaChegadaName
+  )[0];
+  if (!textAreaHoraChegada) {
+    alert("Hora de chegada: elemento HTML não encontrado.");
+    return;
+  }
+  const textAreaHoraSaida = document.getElementsByName(
+    areaPartnerHTMLSelectors.horaSaidaName
+  )[0];
+  if (!textAreaHoraSaida) {
+    alert("Hora de saída: elemento HTML não encontrado.");
+    return;
+  }
 
   const params = new URLSearchParams(window.location.search);
   const clientName = params.get("name");
@@ -48,8 +62,14 @@ function solicitanteInfoFromUrl() {
   );
   if (selectSubject) {
     const selected = decodeURIComponent(params.get("assunto"));
-    changeSelectedOption(selectSubject, selected);
+    changeSelectedOption(selectSubject, selected.trim());
   }
+  textAreaHoraChegada.value = params.get("arrivalTime")
+    ? decodeURIComponent(params.get("arrivalTime"))
+    : "";
+  textAreaHoraSaida.value = params.get("departureTime")
+    ? decodeURIComponent(params.get("departureTime"))
+    : "";
 }
 solicitanteInfoFromUrl();
 

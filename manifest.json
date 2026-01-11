@@ -25,7 +25,7 @@
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
       "js": [
         "utils.js",
-
+        "service-messages.js",
         "components/anchor-button.js",
         "html-selectors.js",
         "content-chat.js"

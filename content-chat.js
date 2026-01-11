@@ -10,9 +10,47 @@ function isDarkModeActive() {
 
 const btnOcorrencia = createAnchorButton(
   "softcom-ocorrencia-btn",
-  "Criar Ocorrência",
+  "Criar OC.",
   journalPlusSVG
 );
+
+const btnOCFinalizada = createAnchorButton(
+  "softcom-ocorrencia-finalizada-btn",
+  "OC. Finalizada",
+  checkSVG
+);
+
+// Criar ícone de help com interrogação
+const helpIconOCFinalizada = document.createElement("span");
+helpIconOCFinalizada.innerText = "?";
+helpIconOCFinalizada.style.cssText = `
+  align-items: center;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: help;
+  position: absolute;
+  margin-top: -18px;
+  margin-right: -6px;
+  text-shadow:
+    -1px -1px 0 #000, 
+     1px -1px 0 #000,
+    -1px  1px 0 #000, 
+     1px  1px 0 #000;
+`;
+helpIconOCFinalizada.title = "Clique aqui para mais informações.";
+helpIconOCFinalizada.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  alert(`
+    Captura horários de chegada e saída da conversa atual para preencher no formulário da OC. Funciona tanto com mensagens enviadas quanto com notas internas.
+    O horário de chegada é identificado quando é usada uma das seguintes frases:
+    ${arrivalMessages.map((msg) => `\n- "${msg}"`).join("")}
+    O horário de saída é identificado quando é usada uma das seguintes frases:
+    ${departureMessages.map((msg) => `\n- "${msg}"`).join("")}
+    `);
+});
+btnOCFinalizada.appendChild(helpIconOCFinalizada);
 
 const btnVerCliente = createAnchorButton(
   "softcom-ver-cliente-btn",
@@ -29,6 +67,7 @@ const btnVerProspectado = createAnchorButton(
 function applyStyleMode() {
   const isDarkMode = isDarkModeActive();
   btnOcorrencia.classList.toggle("dark-mode", isDarkMode);
+  btnOCFinalizada.classList.toggle("dark-mode", isDarkMode);
   btnVerCliente.classList.toggle("dark-mode", isDarkMode);
   btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
 }
@@ -80,11 +119,14 @@ function injectIntoHeader() {
   if (!document.getElementById("softcom-ocorrencia-btn")) {
     header.insertBefore(btnOcorrencia, header.children[2]);
   }
+  if (!document.getElementById("softcom-ocorrencia-finalizada-btn")) {
+    header.insertBefore(btnOCFinalizada, header.children[3]);
+  }
   if (!document.getElementById("softcom-ver-cliente-btn")) {
-    header.insertBefore(btnVerCliente, header.children[3]);
+    header.insertBefore(btnVerCliente, header.children[4]);
   }
   if (!document.getElementById("softcom-ver-prospectado-btn")) {
-    header.insertBefore(btnVerProspectado, header.children[4]);
+    header.insertBefore(btnVerProspectado, header.children[5]);
   }
 }
 
@@ -159,6 +201,42 @@ function captureClientPhone() {
   return phoneElement.innerHTML.trim();
 }
 
+function timeHHMMToNumber(timeStr) {
+  if (typeof timeStr !== "string") return null;
+  const newStr = timeStr.replace(":", "");
+  const timeNum = parseInt(newStr, 10);
+  return isNaN(timeNum) ? null : timeNum;
+}
+
+function captureArrivalAndDepartureTime() {
+  let arrivalTime = null;
+  let departureTime = null;
+  const messages = document.querySelectorAll(".q-message-text-content--sent");
+
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const messageElement = messages[i];
+    const lines = messageElement.innerText.split("\n");
+    if (arrivalMessages.includes(lines[2]) && !arrivalTime) {
+      arrivalTime = lines[3];
+    }
+    if (departureMessages.includes(lines[2]) && !departureTime) {
+      departureTime = lines[3];
+    }
+  }
+  if (!arrivalTime) {
+    alert("Horário de chegada: não foi possível identificar na conversa.");
+  }
+  if (!departureTime) {
+    alert("Horário de saída: não foi possível identificar na conversa.");
+  }
+  if (timeHHMMToNumber(arrivalTime) > timeHHMMToNumber(departureTime)) {
+    alert(
+      `Os horários capturados parecem estar incorretos (${arrivalTime} > ${departureTime}). Checar na conversa.`
+    );
+  }
+  return { arrivalTime, departureTime };
+}
+
 function captureCurrentClientInfo() {
   const client = {
     name: captureClientName(),
@@ -180,6 +258,25 @@ btnOcorrencia.addEventListener("click", () => {
   }?name=${encodeURIComponent(
     currentClientInfo.name
   )}&phone=${encodeURIComponent(currentClientInfo.phone)}&assunto=TEC REMOTO`;
+});
+
+btnOCFinalizada.addEventListener("click", () => {
+  const currentClientInfo = captureCurrentClientInfo();
+  const { arrivalTime, departureTime } = captureArrivalAndDepartureTime();
+  if (currentClientInfo.code === "") {
+    btnOCFinalizada.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    alert("Código do cliente não encontrado. Insira o código nas observações.");
+    return;
+  }
+  btnOCFinalizada.href = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
+    currentClientInfo.code
+  }?name=${encodeURIComponent(
+    currentClientInfo.name
+  )}&phone=${encodeURIComponent(
+    currentClientInfo.phone
+  )}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(
+    arrivalTime || ""
+  )}&departureTime=${encodeURIComponent(departureTime || "")}`;
 });
 
 btnVerCliente.addEventListener("click", () => {
