@@ -66,3 +66,54 @@ searchButton.addEventListener("click", () => {
 searchButtonFullName.addEventListener("click", () => {
   handleAction("searchButtonFullNameClicked", "chat.clientesatisfeito.com.br");
 });
+
+// Menu de opções de botões
+const buttonToggles = {
+  "toggle-btn-ocorrencia": "btnOcorrencia",
+  "toggle-btn-ocorrencia-finalizada": "btnOCFinalizada",
+  "toggle-btn-ver-cliente": "btnVerCliente",
+  "toggle-btn-ver-prospectado": "btnVerProspectado",
+};
+
+// Restaurar estado dos toggles ao abrir popup
+function restoreButtonToggleStates() {
+  chrome.storage.sync.get(Object.keys(buttonToggles), (result) => {
+    Object.keys(buttonToggles).forEach((toggleId) => {
+      const checkbox = document.getElementById(toggleId);
+      const isEnabled = result[toggleId] !== false; // Padrão: true
+      checkbox.checked = isEnabled;
+    });
+  });
+}
+
+// Salvar estado e notificar content script
+function setupButtonToggleListeners() {
+  Object.keys(buttonToggles).forEach((toggleId) => {
+    const checkbox = document.getElementById(toggleId);
+    checkbox.addEventListener("change", () => {
+      const buttonId = buttonToggles[toggleId];
+      const isEnabled = checkbox.checked;
+
+      // Salvar no chrome.storage.sync
+      chrome.storage.sync.set({ [toggleId]: isEnabled });
+
+      // Notificar o content script para atualizar a visibilidade
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0] && tabs[0].url.includes("chat.clientesatisfeito.com.br")) {
+          chrome.tabs
+            .sendMessage(tabs[0].id, {
+              action: "updateButtonVisibility",
+              buttonId: buttonId,
+              isEnabled: isEnabled,
+            })
+            .catch(() => {
+              // Silenciosamente ignora se a aba não tem o content script
+            });
+        }
+      });
+    });
+  });
+}
+
+restoreButtonToggleStates();
+setupButtonToggleListeners();

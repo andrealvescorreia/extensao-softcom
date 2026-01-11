@@ -108,32 +108,87 @@ img.style.cssText = `
 `;
 iconImg.appendChild(img);
 
+// Cache de preferências para acesso rápido
+let buttonPreferences = {
+  "toggle-btn-ocorrencia": true,
+  "toggle-btn-ocorrencia-finalizada": true,
+  "toggle-btn-ver-cliente": true,
+  "toggle-btn-ver-prospectado": true,
+};
+
+// Carregar preferências inicialmente
+function loadButtonPreferences() {
+  chrome.storage.sync.get(Object.keys(buttonPreferences), (result) => {
+    Object.keys(buttonPreferences).forEach((key) => {
+      buttonPreferences[key] = result[key] !== false;
+    });
+    // Injetar após carregar preferências
+    injectIntoHeader();
+  });
+}
+
 function injectIntoHeader() {
   const header = getElementByXPath(clienteSatisfeitoHTMLSelectors.headerXPath);
   if (!header) return;
 
-  // Evita duplicação
+  // Usar cache de preferências (síncrono)
+  const isOcorrenciaEnabled = buttonPreferences["toggle-btn-ocorrencia"];
+  const isOCFinalizadaEnabled =
+    buttonPreferences["toggle-btn-ocorrencia-finalizada"];
+  const isVerClienteEnabled = buttonPreferences["toggle-btn-ver-cliente"];
+  const isVerProspectadoEnabled =
+    buttonPreferences["toggle-btn-ver-prospectado"];
+
+  // Evita duplicação e respeita preferências
   if (!document.getElementById("softcom-header-icon")) {
     header.insertBefore(iconImg, header.children[1]);
   }
-  if (!document.getElementById("softcom-ocorrencia-btn")) {
-    header.insertBefore(btnOcorrencia, header.children[2]);
+
+  // Criar OC
+  if (isOcorrenciaEnabled) {
+    if (!document.getElementById("softcom-ocorrencia-btn")) {
+      header.insertBefore(btnOcorrencia, header.children[2]);
+    }
+  } else {
+    const btn = document.getElementById("softcom-ocorrencia-btn");
+    if (btn) btn.remove();
   }
-  if (!document.getElementById("softcom-ocorrencia-finalizada-btn")) {
-    header.insertBefore(btnOCFinalizada, header.children[3]);
+
+  // OC Finalizada
+  if (isOCFinalizadaEnabled) {
+    if (!document.getElementById("softcom-ocorrencia-finalizada-btn")) {
+      header.insertBefore(btnOCFinalizada, header.children[3]);
+    }
+  } else {
+    const btn = document.getElementById("softcom-ocorrencia-finalizada-btn");
+    if (btn) btn.remove();
   }
-  if (!document.getElementById("softcom-ver-cliente-btn")) {
-    header.insertBefore(btnVerCliente, header.children[4]);
+
+  // Ver Cliente
+  if (isVerClienteEnabled) {
+    if (!document.getElementById("softcom-ver-cliente-btn")) {
+      header.insertBefore(btnVerCliente, header.children[4]);
+    }
+  } else {
+    const btn = document.getElementById("softcom-ver-cliente-btn");
+    if (btn) btn.remove();
   }
-  if (!document.getElementById("softcom-ver-prospectado-btn")) {
-    header.insertBefore(btnVerProspectado, header.children[5]);
+
+  // Ver Prospectado
+  if (isVerProspectadoEnabled) {
+    if (!document.getElementById("softcom-ver-prospectado-btn")) {
+      header.insertBefore(btnVerProspectado, header.children[5]);
+    }
+  } else {
+    const btn = document.getElementById("softcom-ver-prospectado-btn");
+    if (btn) btn.remove();
   }
 }
 
 // Executa quando o DOM estiver pronto
 function initHeaderInjection() {
   const run = () => {
-    injectIntoHeader();
+    loadButtonPreferences();
     observeDarkModeChanges();
   };
 
@@ -324,7 +379,27 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         success: true,
         clientName: clientName,
       });
+    } else if (request.action === "updateButtonVisibility") {
+      const { buttonId, isEnabled } = request;
+
+      // Mapear buttonId para a chave de preferência
+      const prefKeyMap = {
+        btnOcorrencia: "toggle-btn-ocorrencia",
+        btnOCFinalizada: "toggle-btn-ocorrencia-finalizada",
+        btnVerCliente: "toggle-btn-ver-cliente",
+        btnVerProspectado: "toggle-btn-ver-prospectado",
+      };
+
+      const prefKey = prefKeyMap[buttonId];
+      if (prefKey) {
+        // Atualizar cache localmente
+        buttonPreferences[prefKey] = isEnabled;
+        // Atualizar HTML instantaneamente
+        injectIntoHeader();
+      }
+      sendResponse({ success: true });
     }
+    sendResponse({ success: true });
   } catch (error) {
     console.error("[Content1] Erro ao processar ação:", error);
     sendResponse({
