@@ -4,6 +4,7 @@ const clienteSatisfeitoHTMLSelectors = {
   clientPhoneXPath:
     "//*[@id='q-app']/div/div/div/div/div/div[3]/aside/div/div[1]/div[2]/div/div/div/div[1]/div/div/div[1]/div/div[2]/div[2]/span[1]",
   clientObservacoesAriaLabel: "Observações",
+  sentMessageClass: ".q-message-text-content--sent",
 };
 
 const areaPartnerHTMLSelectors = {

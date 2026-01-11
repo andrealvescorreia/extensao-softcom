@@ -211,7 +211,9 @@ function timeHHMMToNumber(timeStr) {
 function captureArrivalAndDepartureTime() {
   let arrivalTime = null;
   let departureTime = null;
-  const messages = document.querySelectorAll(".q-message-text-content--sent");
+  const messages = document.querySelectorAll(
+    clienteSatisfeitoHTMLSelectors.sentMessageClass
+  );
 
   for (let i = messages.length - 1; i >= 0; i--) {
     const messageElement = messages[i];
