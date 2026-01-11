@@ -1,5 +1,13 @@
 // AREA PARTNER FORMULARIO DE OCORRÊNCIA
 
+// Helper para buscar elemento por name ignorando maiúsculas/minúsculas
+function getElementByNameIgnoreCase(name) {
+  const allElements = document.querySelectorAll("[name]");
+  return Array.from(allElements).find(
+    (el) => el.getAttribute("name").toLowerCase() === name.toLowerCase()
+  );
+}
+
 function changeSelectedOption(selectElement, optionText) {
   const option = Array.from(selectElement.options).find(
     (opt) => opt.text === optionText
@@ -11,65 +19,73 @@ function changeSelectedOption(selectElement, optionText) {
 }
 
 function solicitanteInfoFromUrl() {
-  const textAreaSolicitante = document.getElementsByName(
-    areaPartnerHTMLSelectors.solicitanteName
-  )[0];
-  if (!textAreaSolicitante) {
-    alert("Nome do solicitante: elemento HTML não encontrado.");
-    return;
-  }
-  const textAreaDDD = document.getElementsByName(
-    areaPartnerHTMLSelectors.dddName
-  )[0];
-  if (!textAreaDDD) {
-    alert("DDD: elemento HTML não encontrado.");
-    return;
-  }
-  const textAreaFone = document.getElementsByName(
-    areaPartnerHTMLSelectors.foneName
-  )[0];
-  if (!textAreaFone) {
-    alert("Fone: elemento HTML não encontrado.");
-    return;
-  }
-  const textAreaHoraChegada = document.getElementsByName(
-    areaPartnerHTMLSelectors.horaChegadaName
-  )[0];
-  if (!textAreaHoraChegada) {
-    alert("Hora de chegada: elemento HTML não encontrado.");
-    return;
-  }
-  const textAreaHoraSaida = document.getElementsByName(
-    areaPartnerHTMLSelectors.horaSaidaName
-  )[0];
-  if (!textAreaHoraSaida) {
-    alert("Hora de saída: elemento HTML não encontrado.");
-    return;
+  const params = new URLSearchParams(window.location.search);
+  const clientName = decodeURIComponent(params.get("name"));
+  if (clientName !== "null" && clientName) {
+    const textAreaSolicitante = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.solicitanteName
+    );
+    if (textAreaSolicitante) {
+      textAreaSolicitante.value = clientName;
+    } else {
+      console.error("Nome do solicitante: elemento HTML não encontrado.");
+    }
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const clientName = params.get("name");
-  textAreaSolicitante.value = clientName ? decodeURIComponent(clientName) : "";
-  const phone = params.get("phone")
-    ? decodeURIComponent(params.get("phone"))
-    : "";
-  const ddd = phone.slice(2, 4);
-  textAreaDDD.value = ddd;
-  const fone = phone.slice(4);
-  textAreaFone.value = fone;
-  const selectSubject = document.getElementById(
-    areaPartnerHTMLSelectors.assuntoId
-  );
-  if (selectSubject) {
-    const selected = decodeURIComponent(params.get("assunto"));
-    changeSelectedOption(selectSubject, selected.trim());
+  const phone = decodeURIComponent(params.get("phone"));
+  if (phone !== "null" && phone) {
+    const textAreaDDD = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.dddName
+    );
+    const textAreaFone = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.foneName
+    );
+    if (textAreaDDD && textAreaFone) {
+      const ddd = phone.slice(2, 4);
+      textAreaDDD.value = ddd;
+      const fone = phone.slice(4);
+      textAreaFone.value = fone;
+    } else {
+      console.error("Telefone: elemento HTML não encontrado.");
+    }
   }
-  textAreaHoraChegada.value = params.get("arrivalTime")
-    ? decodeURIComponent(params.get("arrivalTime"))
-    : "";
-  textAreaHoraSaida.value = params.get("departureTime")
-    ? decodeURIComponent(params.get("departureTime"))
-    : "";
+
+  const selected = decodeURIComponent(params.get("assunto"));
+  if (selected !== "null" && selected) {
+    console.log("reuw");
+    const selectSubject = document.getElementById(
+      areaPartnerHTMLSelectors.assuntoId
+    );
+    if (selectSubject) {
+      changeSelectedOption(selectSubject, selected.trim());
+    } else {
+      console.error("Assunto: elemento HTML não encontrado.");
+    }
+  }
+
+  const arrivalTime = decodeURIComponent(params.get("arrivalTime"));
+  if (arrivalTime !== "null" && arrivalTime) {
+    const textAreaHoraChegada = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaChegadaName
+    );
+    if (textAreaHoraChegada) {
+      textAreaHoraChegada.value = arrivalTime;
+    } else {
+      console.error("Hora de chegada: elemento HTML não encontrado.");
+    }
+  }
+
+  const departureTime = decodeURIComponent(params.get("departureTime"));
+  if (departureTime !== "null" && departureTime) {
+    const textAreaHoraSaida = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaSaidaName
+    );
+    if (textAreaHoraSaida) {
+      textAreaHoraSaida.value = departureTime;
+    } else {
+      console.error("Hora de saída: elemento HTML não encontrado.");
+    }
+  }
 }
 solicitanteInfoFromUrl();
 
@@ -80,27 +96,20 @@ function applyPredefinition(pred) {
       support: document.getElementById(selectors.suporteId),
       subject: document.getElementById(selectors.assuntoId),
       user: document.getElementById(selectors.usuarioPartnerId),
-      reason: document.getElementsByName(selectors.motivoName)[0],
+      reason: getElementByNameIgnoreCase(selectors.motivoName),
       urgent: getElementByXPath(selectors.urgenteXPath),
       is: getElementByXPath(selectors.IsXPath),
-      workDone: document.getElementsByName(selectors.servicoRealizadoName)[0],
-      module: document.getElementsByName(selectors.moduloName)[0],
-      example: document.getElementsByName(selectors.exemploName)[0],
+      workDone:
+        getElementByNameIgnoreCase(selectors.servicoRealizadoName) ||
+        getElementByNameIgnoreCase(selectors.alternativeServicoRealizadoName),
+      module: getElementByNameIgnoreCase(selectors.moduloName),
+      example: getElementByNameIgnoreCase(selectors.exemploName),
     };
-
     if (
-      !elements.support ||
-      !elements.subject ||
-      !elements.user ||
-      !elements.reason ||
-      !elements.urgent ||
-      !elements.is ||
-      !elements.workDone
+      pred.motivo !== undefined &&
+      elements.reason &&
+      elements.reason.value !== pred.motivo
     ) {
-      throw new Error("Elemento html não encontrado.");
-    }
-
-    if (pred.motivo !== undefined && elements.reason.value !== pred.motivo) {
       const shouldOverwrite =
         !elements.reason.value ||
         confirm(
@@ -110,18 +119,23 @@ function applyPredefinition(pred) {
         elements.reason.value = pred.motivo;
       }
     }
-    if (pred.suporte !== undefined)
+    if (pred.suporte !== undefined && elements.support)
       changeSelectedOption(elements.support, pred.suporte);
-    if (pred.assunto !== undefined)
+    if (pred.assunto !== undefined && elements.subject)
       changeSelectedOption(elements.subject, pred.assunto);
-    if (pred.usuarioPartner !== undefined)
+    if (pred.usuarioPartner !== undefined && elements.user)
       changeSelectedOption(elements.user, pred.usuarioPartner);
-    if (pred.urgente !== undefined && pred.urgente !== elements.urgent.checked)
+    if (
+      pred.urgente !== undefined &&
+      elements.urgent &&
+      pred.urgente !== elements.urgent.checked
+    )
       elements.urgent.click();
-    if (pred.is !== undefined && pred.is !== elements.is.checked)
+    if (pred.is !== undefined && elements.is && pred.is !== elements.is.checked)
       elements.is.click();
     if (
       pred.servicoRealizado !== undefined &&
+      elements.workDone &&
       elements.workDone.value !== pred.servicoRealizado
     ) {
       const shouldOverwrite =
@@ -133,8 +147,10 @@ function applyPredefinition(pred) {
         elements.workDone.value = pred.servicoRealizado;
       }
     }
-    if (pred.modulo !== undefined) elements.module.value = pred.modulo;
-    if (pred.exemplo !== undefined) elements.example.value = pred.exemplo;
+    if (pred.modulo !== undefined && elements.module)
+      elements.module.value = pred.modulo;
+    if (pred.exemplo !== undefined && elements.example)
+      elements.example.value = pred.exemplo;
   } catch (error) {
     console.error(
       "[Content-Predefinições] Erro ao aplicar predefinição:",
@@ -156,7 +172,8 @@ predefiniitonsContainer.class = "panel-body";
 buttons.forEach((btn) => predefiniitonsContainer.appendChild(btn));
 
 const accordion = document.getElementById(areaPartnerHTMLSelectors.accordionId);
-if (accordion) {
+
+function createPredefinitionsElement() {
   const newElement = document.createElement("div");
   newElement.className = "accordion-item";
   const collapseFour = document.createElement("div");
@@ -167,7 +184,6 @@ if (accordion) {
   collapseFour.appendChild(predefiniitonsContainer);
 
   newElement.innerHTML = `
-    
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="headingFour">
       <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
@@ -179,5 +195,13 @@ if (accordion) {
     </div>
   `;
   newElement.appendChild(collapseFour);
-  accordion.appendChild(newElement);
+  return newElement;
+}
+
+const predefinitionsElements = createPredefinitionsElement();
+if (accordion) {
+  accordion.appendChild(predefinitionsElements);
+} else {
+  const sibling = document.querySelectorAll(".panel")[1];
+  sibling.parentNode.insertBefore(predefinitionsElements, sibling);
 }

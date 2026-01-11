@@ -33,7 +33,10 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://areapartner.softcomsistemas.com.br/agenda/form/*"],
+      "matches": [
+        "https://areapartner.softcomsistemas.com.br/agenda/form/*",
+        "https://areapartner.softcomsistemas.com.br/ocorrencia/form/*"
+      ],
       "js": [
         "utils.js",
         "html-selectors.js",
