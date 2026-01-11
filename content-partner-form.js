@@ -100,7 +100,16 @@ function applyPredefinition(pred) {
       throw new Error("Elemento html não encontrado.");
     }
 
-    if (pred.motivo !== undefined) elements.reason.value = pred.motivo;
+    if (pred.motivo !== undefined && elements.reason.value !== pred.motivo) {
+      const shouldOverwrite =
+        !elements.reason.value ||
+        confirm(
+          "Isso irá sobrescrever o texto já existente em 'Motivo'. Deseja continuar?"
+        );
+      if (shouldOverwrite) {
+        elements.reason.value = pred.motivo;
+      }
+    }
     if (pred.suporte !== undefined)
       changeSelectedOption(elements.support, pred.suporte);
     if (pred.assunto !== undefined)
@@ -111,8 +120,19 @@ function applyPredefinition(pred) {
       elements.urgent.click();
     if (pred.is !== undefined && pred.is !== elements.is.checked)
       elements.is.click();
-    if (pred.servicoRealizado !== undefined)
-      elements.workDone.value = pred.servicoRealizado;
+    if (
+      pred.servicoRealizado !== undefined &&
+      elements.workDone.value !== pred.servicoRealizado
+    ) {
+      const shouldOverwrite =
+        !elements.workDone.value ||
+        confirm(
+          "Isso irá sobrescrever o texto já existente em 'Serviço Realizado'. Deseja continuar?"
+        );
+      if (shouldOverwrite) {
+        elements.workDone.value = pred.servicoRealizado;
+      }
+    }
     if (pred.modulo !== undefined) elements.module.value = pred.modulo;
     if (pred.exemplo !== undefined) elements.example.value = pred.exemplo;
   } catch (error) {
