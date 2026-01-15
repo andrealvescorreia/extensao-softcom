@@ -10,6 +10,7 @@ const ocorrenciaPredefinitions = [
   {
     name: "SPED Gerado",
     servicoRealizado: "SPED gerado e enviado a contabilidade.",
+    usuarioPartner: "(usuario_atual)",
   },
   {
     name: "Apoio Matriz",

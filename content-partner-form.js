@@ -124,7 +124,10 @@ function applyPredefinition(pred) {
     if (pred.assunto !== undefined && elements.subject)
       changeSelectedOption(elements.subject, pred.assunto);
     if (pred.usuarioPartner !== undefined && elements.user)
-      changeSelectedOption(elements.user, pred.usuarioPartner);
+      if( pred.usuarioPartner === "(usuario_atual)") {
+        const userName = document.querySelectorAll('.user-name')[0].textContent;
+        changeSelectedOption(elements.user, userName);
+      } else changeSelectedOption(elements.user, pred.usuarioPartner);
     if (
       pred.urgente !== undefined &&
       elements.urgent &&
