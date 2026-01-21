@@ -28,9 +28,13 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 });
 
 function searchClientByNameOnAreaPartner(clientName) {
-  const url = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${clientName}`;
-
-  chrome.tabs.create({ url: url });
+  chrome.storage.sync.get(['area-partner-use-alternative'], (result) => {
+    const useAlternative = result['area-partner-use-alternative'] || false;
+    const baseUrl = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
+    const url = `${baseUrl}cliente/index?&nome_cliente=${clientName}`;
+    
+    chrome.tabs.create({ url: url });
+  });
 }
 
 function handleAction(action, supportedUrl) {
@@ -117,3 +121,52 @@ function setupButtonToggleListeners() {
 
 restoreButtonToggleStates();
 setupButtonToggleListeners();
+
+// Gerenciar URL da Area Partner
+const AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br/";
+const AREA_PARTNER_URL_ALTERNATIVE = "http://177.43.232.2:25123/area-partner/public/";
+
+const toggleAreaPartnerUrl = document.getElementById('toggle-area-partner-url');
+const currentUrlDisplay = document.getElementById('current-url-display');
+
+// Restaurar estado do toggle de URL
+function restoreUrlToggleState() {
+  chrome.storage.sync.get(['area-partner-use-alternative'], (result) => {
+    const useAlternative = result['area-partner-use-alternative'] || false;
+    toggleAreaPartnerUrl.checked = useAlternative;
+    updateUrlDisplay(useAlternative);
+  });
+}
+
+// Atualizar display da URL atual
+function updateUrlDisplay(useAlternative) {
+  const url = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
+  currentUrlDisplay.textContent = `URL atual: ${url}`;
+}
+
+// Listener para mudanças no toggle
+toggleAreaPartnerUrl.addEventListener('change', () => {
+  const useAlternative = toggleAreaPartnerUrl.checked;
+  
+  // Salvar no storage
+  chrome.storage.sync.set({ 'area-partner-use-alternative': useAlternative });
+  
+  // Atualizar display
+  updateUrlDisplay(useAlternative);
+  
+  // Notificar todos os content scripts ativos
+  chrome.tabs.query({}, (tabs) => {
+    tabs.forEach((tab) => {
+      if (tab.url && tab.url.includes('chat.clientesatisfeito.com.br')) {
+        chrome.tabs.sendMessage(tab.id, {
+          action: 'updateAreaPartnerUrl',
+          useAlternative: useAlternative
+        }).catch(() => {
+          // Ignora erros se a aba não tem content script
+        });
+      }
+    });
+  });
+});
+
+restoreUrlToggleState();

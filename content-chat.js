@@ -1,5 +1,19 @@
 // CLIENTE SATISFEITO
 
+const AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br/";
+const AREA_PARTNER_URL_ALTERNATIVE = "http://177.43.232.2:25123/area-partner/public/";
+
+let AREA_PARTNER_BASE_URL = AREA_PARTNER_URL_PRODUCTION;
+
+// Carregar URL da Area Partner do storage
+chrome.storage.sync.get(['area-partner-use-alternative'], (result) => {
+  const useAlternative = result['area-partner-use-alternative'] || false;
+  AREA_PARTNER_BASE_URL = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
+  
+  // Atualizar href do ícone
+  iconImg.href = AREA_PARTNER_BASE_URL;
+});
+
 function isDarkModeActive() {
   const target = document.body || document.documentElement;
   if (!target) return false;
@@ -88,7 +102,7 @@ function observeDarkModeChanges() {
 
 const iconImg = document.createElement("a");
 iconImg.id = "softcom-header-icon";
-iconImg.href = "https://areapartner.softcomsistemas.com.br/";
+iconImg.href = AREA_PARTNER_BASE_URL;
 iconImg.target = "_blank";
 iconImg.rel = "noopener noreferrer";
 iconImg.style.cssText = `
@@ -306,11 +320,11 @@ function captureCurrentClientInfo() {
 btnOcorrencia.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnOcorrencia.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  btnOcorrencia.href = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
+  btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
     currentClientInfo.name
@@ -321,11 +335,11 @@ btnOCFinalizada.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   const { arrivalTime, departureTime } = captureArrivalAndDepartureTime();
   if (currentClientInfo.code === "") {
-    btnOCFinalizada.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}/cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  btnOCFinalizada.href = `https://areapartner.softcomsistemas.com.br/agenda/form/id/${
+  btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}/agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
     currentClientInfo.name
@@ -339,24 +353,24 @@ btnOCFinalizada.addEventListener("click", () => {
 btnVerCliente.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerCliente.href = `https://areapartner.softcomsistemas.com.br/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnVerCliente.href = `${AREA_PARTNER_BASE_URL}/cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  const url = `https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/${currentClientInfo.code}`;
+  const url = `${AREA_PARTNER_BASE_URL}/cliente/index/detail/id/${currentClientInfo.code}`;
   btnVerCliente.href = url;
 });
 
 btnVerProspectado.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerProspectado.href = `https://areapartner.softcomsistemas.com.br/comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
+    btnVerProspectado.href = `${AREA_PARTNER_BASE_URL}/comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
     alert(
       "Código do prospectado não encontrado. Insira o código nas observações."
     );
     return;
   }
-  const url = `https://areapartner.softcomsistemas.com.br/comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
+  const url = `${AREA_PARTNER_BASE_URL}/comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
   btnVerProspectado.href = url;
 });
 
@@ -398,6 +412,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         injectIntoHeader();
       }
       sendResponse({ success: true });
+    } else if (request.action === "updateAreaPartnerUrl") {
+      const { useAlternative } = request;
+      AREA_PARTNER_BASE_URL = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
+      iconImg.href = AREA_PARTNER_BASE_URL;
+      sendResponse({ success: true, url: AREA_PARTNER_BASE_URL });
     }
     sendResponse({ success: true });
   } catch (error) {
