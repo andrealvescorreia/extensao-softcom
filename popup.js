@@ -123,8 +123,8 @@ restoreButtonToggleStates();
 setupButtonToggleListeners();
 
 // Gerenciar URL da Area Partner
-const AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br/";
-const AREA_PARTNER_URL_ALTERNATIVE = "http://177.43.232.2:25123/area-partner/public/";
+const AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br";
+const AREA_PARTNER_URL_ALTERNATIVE = "http://177.43.232.2:25123/area-partner/public";
 
 const toggleAreaPartnerUrl = document.getElementById('toggle-area-partner-url');
 const currentUrlDisplay = document.getElementById('current-url-display');

@@ -335,11 +335,11 @@ btnOCFinalizada.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   const { arrivalTime, departureTime } = captureArrivalAndDepartureTime();
   if (currentClientInfo.code === "") {
-    btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}/agenda/form/id/${
+  btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
     currentClientInfo.name
@@ -353,24 +353,24 @@ btnOCFinalizada.addEventListener("click", () => {
 btnVerCliente.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerCliente.href = `${AREA_PARTNER_BASE_URL}/cliente/index?&nome_cliente=${currentClientInfo.name}`;
+    btnVerCliente.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
     alert("Código do cliente não encontrado. Insira o código nas observações.");
     return;
   }
-  const url = `${AREA_PARTNER_BASE_URL}/cliente/index/detail/id/${currentClientInfo.code}`;
+  const url = `${AREA_PARTNER_BASE_URL}cliente/index/detail/id/${currentClientInfo.code}`;
   btnVerCliente.href = url;
 });
 
 btnVerProspectado.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
-    btnVerProspectado.href = `${AREA_PARTNER_BASE_URL}/comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
+    btnVerProspectado.href = `${AREA_PARTNER_BASE_URL}comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
     alert(
       "Código do prospectado não encontrado. Insira o código nas observações."
     );
     return;
   }
-  const url = `${AREA_PARTNER_BASE_URL}/comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
+  const url = `${AREA_PARTNER_BASE_URL}comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
   btnVerProspectado.href = url;
 });
 
