@@ -2,8 +2,28 @@
 
 async function copyToClipboard(cleanText) {
   try {
-    await navigator.clipboard.writeText(cleanText);
-    console.log("Text copied to clipboard");
+    // Tentar usar a API Clipboard (funciona em HTTPS)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(cleanText);
+      console.log("Text copied to clipboard");
+    } else {
+      // Fallback para HTTP e navegadores antigos
+      const textArea = document.createElement("textarea");
+      textArea.value = cleanText;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textArea);
+
+      if (!successful) {
+        throw new Error("Fallback: Copy command was unsuccessful");
+      }
+    }
   } catch (err) {
     console.error("Failed to copy text: ", err);
   }
@@ -29,9 +49,31 @@ svgIconElement.style.width = "18px";
 svgIconElement.style.height = "18px";
 copyButton.appendChild(svgIconElement);
 
+function showCopyFeedback(button) {
+  const tooltip = document.createElement("div");
+  tooltip.textContent = "Copiado!";
+  tooltip.style.position = "absolute";
+  tooltip.style.bottom = "100%";
+  tooltip.style.left = "50%";
+  tooltip.style.transform = "translateX(-50%)";
+  tooltip.style.backgroundColor = "#ebebebff";
+  tooltip.style.padding = "8px 12px";
+  tooltip.style.borderRadius = "4px";
+  tooltip.style.fontSize = "12px";
+  tooltip.style.whiteSpace = "nowrap";
+  tooltip.style.zIndex = "10000";
+  tooltip.style.marginBottom = "5px";
+
+  button.appendChild(tooltip);
+
+  setTimeout(() => {
+    tooltip.remove();
+  }, 1500);
+}
+
 function injectCopyButton() {
   const cnpjInput = document.getElementsByName(
-    areaPartnerHTMLSelectors.cnpjName
+    areaPartnerHTMLSelectors.cnpjName,
   )[0];
 
   if (!cnpjInput) {
@@ -43,6 +85,7 @@ function injectCopyButton() {
     const text = cnpjInput.value;
     const cleanText = text.replace(/\D/g, "");
     copyToClipboard(cleanText);
+    showCopyFeedback(copyButton);
   };
 
   const parent = cnpjInput.parentElement;
@@ -55,7 +98,7 @@ function injectCopyButton() {
 injectCopyButton();
 
 const identificacaoLi = getElementByXPath(
-  areaPartnerHTMLSelectors.identificacaoLiXPath
+  areaPartnerHTMLSelectors.identificacaoLiXPath,
 );
 
 if (identificacaoLi) {
