@@ -17,9 +17,36 @@ function widePanels() {
 
 function hidePosVendasPanels() {
   const posVendasPanels = document.querySelectorAll("#filter");
-  if (posVendasPanels.length > 0) {
-    posVendasPanels.forEach((panel) => (panel.style.display = "none"));
+
+  const targetPanel = posVendasPanels[0];
+  const parent = targetPanel.parentElement;
+  const grandParent = parent ? parent.parentElement : null;
+  if (grandParent) {
+    grandParent.appendChild(parent);
   }
+  if (posVendasPanels.length == 2) {
+    posVendasPanels[1].style.display = "none";
+  }
+}
+
+function moveCurrentUserPanelToTop() {
+  const userName = document.querySelectorAll(
+    areaPartnerHTMLSelectors.userNameClass,
+  )[0].textContent;
+  const panels = document.querySelectorAll(".panel");
+  panels.forEach((panel) => {
+    const heading = panel.querySelectorAll(".panel-heading")[0];
+    const titleElement = heading.querySelectorAll(".panel-title")[0];
+    if (
+      heading &&
+      titleElement &&
+      titleElement.textContent.includes(userName)
+    ) {
+      const parent = panel.parentElement;
+      const grandParent = parent.parentElement;
+      grandParent.insertBefore(parent, grandParent.firstChild);
+    }
+  });
 }
 
 function addArchiveAllButton() {
@@ -58,6 +85,7 @@ function addArchiveAllButton() {
 function applyChanges() {
   widePanels();
   hidePosVendasPanels();
+  moveCurrentUserPanelToTop();
   addArchiveAllButton();
 }
 applyChanges();
