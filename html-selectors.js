@@ -8,6 +8,10 @@ const clienteSatisfeitoHTMLSelectors = {
 };
 
 const areaPartnerHTMLSelectors = {
+  // NAV ELEMENTS
+  userNameClass: ".user-name",
+
+  // FORM FIELDS
   accordionId: "accordion",
   solicitanteName: "Solicitante",
   dddName: "txtDDDContato",
@@ -24,6 +28,8 @@ const areaPartnerHTMLSelectors = {
   alternativeServicoRealizadoName: "servico_realizado",
   urgenteXPath: '//*[@id="filter"]/div[2]/div/form/div[18]/input',
   IsXPath: "//*[@id='filter']/div[2]/div/form/div[19]/input",
+
+  // CLIENT INFO
   cnpjName: "cnpj",
   identificacaoLiXPath: "/html/body/div[1]/main/div[2]/div[2]/ul/li[1]",
 };

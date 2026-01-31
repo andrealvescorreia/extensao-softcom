@@ -4,13 +4,13 @@
 function getElementByNameIgnoreCase(name) {
   const allElements = document.querySelectorAll("[name]");
   return Array.from(allElements).find(
-    (el) => el.getAttribute("name").toLowerCase() === name.toLowerCase()
+    (el) => el.getAttribute("name").toLowerCase() === name.toLowerCase(),
   );
 }
 
 function changeSelectedOption(selectElement, optionText) {
   const option = Array.from(selectElement.options).find(
-    (opt) => opt.text === optionText
+    (opt) => opt.text === optionText,
   );
   selectElement.selectedIndex = option.index;
 
@@ -23,7 +23,7 @@ function solicitanteInfoFromUrl() {
   const clientName = decodeURIComponent(params.get("name"));
   if (clientName !== "null" && clientName) {
     const textAreaSolicitante = getElementByNameIgnoreCase(
-      areaPartnerHTMLSelectors.solicitanteName
+      areaPartnerHTMLSelectors.solicitanteName,
     );
     if (textAreaSolicitante) {
       textAreaSolicitante.value = clientName;
@@ -35,10 +35,10 @@ function solicitanteInfoFromUrl() {
   const phone = decodeURIComponent(params.get("phone"));
   if (phone !== "null" && phone) {
     const textAreaDDD = getElementByNameIgnoreCase(
-      areaPartnerHTMLSelectors.dddName
+      areaPartnerHTMLSelectors.dddName,
     );
     const textAreaFone = getElementByNameIgnoreCase(
-      areaPartnerHTMLSelectors.foneName
+      areaPartnerHTMLSelectors.foneName,
     );
     if (textAreaDDD && textAreaFone) {
       const ddd = phone.slice(2, 4);
@@ -54,7 +54,7 @@ function solicitanteInfoFromUrl() {
   if (selected !== "null" && selected) {
     console.log("reuw");
     const selectSubject = document.getElementById(
-      areaPartnerHTMLSelectors.assuntoId
+      areaPartnerHTMLSelectors.assuntoId,
     );
     if (selectSubject) {
       changeSelectedOption(selectSubject, selected.trim());
@@ -66,7 +66,7 @@ function solicitanteInfoFromUrl() {
   const arrivalTime = decodeURIComponent(params.get("arrivalTime"));
   if (arrivalTime !== "null" && arrivalTime) {
     const textAreaHoraChegada = getElementByNameIgnoreCase(
-      areaPartnerHTMLSelectors.horaChegadaName
+      areaPartnerHTMLSelectors.horaChegadaName,
     );
     if (textAreaHoraChegada) {
       textAreaHoraChegada.value = arrivalTime;
@@ -78,7 +78,7 @@ function solicitanteInfoFromUrl() {
   const departureTime = decodeURIComponent(params.get("departureTime"));
   if (departureTime !== "null" && departureTime) {
     const textAreaHoraSaida = getElementByNameIgnoreCase(
-      areaPartnerHTMLSelectors.horaSaidaName
+      areaPartnerHTMLSelectors.horaSaidaName,
     );
     if (textAreaHoraSaida) {
       textAreaHoraSaida.value = departureTime;
@@ -113,7 +113,7 @@ function applyPredefinition(pred) {
       const shouldOverwrite =
         !elements.reason.value ||
         confirm(
-          "Isso irá sobrescrever o texto já existente em 'Motivo'. Deseja continuar?"
+          "Isso irá sobrescrever o texto já existente em 'Motivo'. Deseja continuar?",
         );
       if (shouldOverwrite) {
         elements.reason.value = pred.motivo;
@@ -124,8 +124,10 @@ function applyPredefinition(pred) {
     if (pred.assunto !== undefined && elements.subject)
       changeSelectedOption(elements.subject, pred.assunto);
     if (pred.usuarioPartner !== undefined && elements.user)
-      if( pred.usuarioPartner === "(usuario_atual)") {
-        const userName = document.querySelectorAll('.user-name')[0].textContent;
+      if (pred.usuarioPartner === "(usuario_atual)") {
+        const userName = document.querySelectorAll(
+          areaPartnerHTMLSelectors.userNameClass,
+        )[0].textContent;
         changeSelectedOption(elements.user, userName);
       } else changeSelectedOption(elements.user, pred.usuarioPartner);
     if (
@@ -144,7 +146,7 @@ function applyPredefinition(pred) {
       const shouldOverwrite =
         !elements.workDone.value ||
         confirm(
-          "Isso irá sobrescrever o texto já existente em 'Serviço Realizado'. Deseja continuar?"
+          "Isso irá sobrescrever o texto já existente em 'Serviço Realizado'. Deseja continuar?",
         );
       if (shouldOverwrite) {
         elements.workDone.value = pred.servicoRealizado;
@@ -157,7 +159,7 @@ function applyPredefinition(pred) {
   } catch (error) {
     console.error(
       "[Content-Predefinições] Erro ao aplicar predefinição:",
-      error
+      error,
     );
     alert("Erro ao aplicar predefinição: " + error.message);
   }
