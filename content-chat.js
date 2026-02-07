@@ -1,15 +1,19 @@
 // CLIENTE SATISFEITO
 
-const AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br/";
-const AREA_PARTNER_URL_ALTERNATIVE = "http://177.43.232.2:25123/area-partner/public/";
+const AREA_PARTNER_URL_PRODUCTION =
+  "https://areapartner.softcomsistemas.com.br/";
+const AREA_PARTNER_URL_ALTERNATIVE =
+  "http://177.43.232.2:25123/area-partner/public/";
 
 let AREA_PARTNER_BASE_URL = AREA_PARTNER_URL_PRODUCTION;
 
 // Carregar URL da Area Partner do storage
-chrome.storage.sync.get(['area-partner-use-alternative'], (result) => {
-  const useAlternative = result['area-partner-use-alternative'] || false;
-  AREA_PARTNER_BASE_URL = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
-  
+chrome.storage.sync.get(["area-partner-use-alternative"], (result) => {
+  const useAlternative = result["area-partner-use-alternative"] || false;
+  AREA_PARTNER_BASE_URL = useAlternative
+    ? AREA_PARTNER_URL_ALTERNATIVE
+    : AREA_PARTNER_URL_PRODUCTION;
+
   // Atualizar href do ícone
   iconImg.href = AREA_PARTNER_BASE_URL;
 });
@@ -22,16 +26,38 @@ function isDarkModeActive() {
   return Boolean(document.querySelector(".body--dark"));
 }
 
+const iconImg = document.createElement("a");
+iconImg.id = "softcom-header-icon";
+iconImg.href = AREA_PARTNER_BASE_URL;
+iconImg.target = "_blank";
+iconImg.rel = "noopener noreferrer";
+iconImg.style.cssText = `
+  margin-left: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const img = document.createElement("img");
+img.src = chrome.runtime.getURL("icon.png");
+img.alt = "Softcom Extensão";
+img.style.cssText = `
+  width: 32px;
+  height: 32px;
+`;
+iconImg.appendChild(img);
+
 const btnOcorrencia = createAnchorButton(
   "softcom-ocorrencia-btn",
   "Criar OC.",
-  journalPlusSVG
+  journalPlusSVG,
 );
 
 const btnOCFinalizada = createAnchorButton(
   "softcom-ocorrencia-finalizada-btn",
   "OC. Finalizada",
-  checkSVG
+  checkSVG,
 );
 
 // Criar ícone de help com interrogação
@@ -69,13 +95,13 @@ btnOCFinalizada.appendChild(helpIconOCFinalizada);
 const btnVerCliente = createAnchorButton(
   "softcom-ver-cliente-btn",
   "Ver Cliente",
-  pencilSVG
+  pencilSVG,
 );
 
 const btnVerProspectado = createAnchorButton(
   "softcom-ver-prospectado-btn",
   "Ver Prospectado",
-  pencilSVG
+  pencilSVG,
 );
 
 function applyStyleMode() {
@@ -85,7 +111,6 @@ function applyStyleMode() {
   btnVerCliente.classList.toggle("dark-mode", isDarkMode);
   btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
 }
-applyStyleMode();
 
 // Observer para monitorar mudanças no modo escuro
 function observeDarkModeChanges() {
@@ -99,28 +124,6 @@ function observeDarkModeChanges() {
     attributeFilter: ["class"],
   });
 }
-
-const iconImg = document.createElement("a");
-iconImg.id = "softcom-header-icon";
-iconImg.href = AREA_PARTNER_BASE_URL;
-iconImg.target = "_blank";
-iconImg.rel = "noopener noreferrer";
-iconImg.style.cssText = `
-  margin-left: 8px;
-  margin-right: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`;
-
-const img = document.createElement("img");
-img.src = chrome.runtime.getURL("icon.png");
-img.alt = "Softcom Extensão";
-img.style.cssText = `
-  width: 32px;
-  height: 32px;
-`;
-iconImg.appendChild(img);
 
 // Cache de preferências para acesso rápido
 let buttonPreferences = {
@@ -201,11 +204,6 @@ function injectIntoHeader() {
 
 // Executa quando o DOM estiver pronto
 function initHeaderInjection() {
-  const run = () => {
-    loadButtonPreferences();
-    observeDarkModeChanges();
-  };
-
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run, { once: true });
   } else run();
@@ -217,7 +215,7 @@ function initHeaderInjection() {
 
 function captureClientName() {
   const nameElement = getElementByXPath(
-    clienteSatisfeitoHTMLSelectors.clientNameXPath
+    clienteSatisfeitoHTMLSelectors.clientNameXPath,
   );
   if (!nameElement) {
     alert("Nome do cliente: elemento HTML não encontrado.");
@@ -228,7 +226,7 @@ function captureClientName() {
 
 function captureClientCode() {
   const observacoesElement = document.querySelector(
-    `[aria-label="${clienteSatisfeitoHTMLSelectors.clientObservacoesAriaLabel}"]`
+    `[aria-label="${clienteSatisfeitoHTMLSelectors.clientObservacoesAriaLabel}"]`,
   );
   if (!observacoesElement) {
     alert("Observações: elemento HTML não encontrado.");
@@ -238,10 +236,11 @@ function captureClientCode() {
   const text = observacoesElement.value.trim();
   if (text.includes("\n")) {
     const lines = text.split("\n");
+    const defaultChoice = "1";
     const choice = prompt(
       "Foram encontradas múltiplas linhas nas observações. Insira o número da linha que contém o código do cliente:\n" +
         lines.map((line, index) => `${index + 1}: ${line}`).join("\n"),
-      "1"
+      defaultChoice,
     );
     if (choice !== null) {
       const lineNumber = parseInt(choice, 10);
@@ -261,7 +260,7 @@ function captureClientCode() {
 
 function captureClientPhone() {
   const phoneElement = getElementByXPath(
-    clienteSatisfeitoHTMLSelectors.clientPhoneXPath
+    clienteSatisfeitoHTMLSelectors.clientPhoneXPath,
   );
   if (!phoneElement) {
     alert("Telefone do cliente: elemento HTML não encontrado.");
@@ -281,7 +280,7 @@ function captureArrivalAndDepartureTime() {
   let arrivalTime = null;
   let departureTime = null;
   const messages = document.querySelectorAll(
-    clienteSatisfeitoHTMLSelectors.sentMessageClass
+    clienteSatisfeitoHTMLSelectors.sentMessageClass,
   );
 
   for (let i = messages.length - 1; i >= 0; i--) {
@@ -300,9 +299,13 @@ function captureArrivalAndDepartureTime() {
   if (!departureTime) {
     alert("Horário de saída: não foi possível identificar na conversa.");
   }
-  if (timeHHMMToNumber(arrivalTime) > timeHHMMToNumber(departureTime)) {
+  if (
+    arrivalTime &&
+    departureTime &&
+    timeHHMMToNumber(arrivalTime) > timeHHMMToNumber(departureTime)
+  ) {
     alert(
-      `Os horários capturados parecem estar incorretos (${arrivalTime} > ${departureTime}). Checar na conversa.`
+      `Os horários capturados parecem estar incorretos (${arrivalTime} > ${departureTime}). Checar na conversa.`,
     );
   }
   return { arrivalTime, departureTime };
@@ -327,7 +330,7 @@ btnOcorrencia.addEventListener("click", () => {
   btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
-    currentClientInfo.name
+    currentClientInfo.name,
   )}&phone=${encodeURIComponent(currentClientInfo.phone)}&assunto=TEC REMOTO`;
 });
 
@@ -342,11 +345,11 @@ btnOCFinalizada.addEventListener("click", () => {
   btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
   }?name=${encodeURIComponent(
-    currentClientInfo.name
+    currentClientInfo.name,
   )}&phone=${encodeURIComponent(
-    currentClientInfo.phone
+    currentClientInfo.phone,
   )}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(
-    arrivalTime || ""
+    arrivalTime || "",
   )}&departureTime=${encodeURIComponent(departureTime || "")}`;
 });
 
@@ -366,7 +369,7 @@ btnVerProspectado.addEventListener("click", () => {
   if (currentClientInfo.code === "") {
     btnVerProspectado.href = `${AREA_PARTNER_BASE_URL}comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
     alert(
-      "Código do prospectado não encontrado. Insira o código nas observações."
+      "Código do prospectado não encontrado. Insira o código nas observações.",
     );
     return;
   }
@@ -414,7 +417,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse({ success: true });
     } else if (request.action === "updateAreaPartnerUrl") {
       const { useAlternative } = request;
-      AREA_PARTNER_BASE_URL = useAlternative ? AREA_PARTNER_URL_ALTERNATIVE : AREA_PARTNER_URL_PRODUCTION;
+      AREA_PARTNER_BASE_URL = useAlternative
+        ? AREA_PARTNER_URL_ALTERNATIVE
+        : AREA_PARTNER_URL_PRODUCTION;
       iconImg.href = AREA_PARTNER_BASE_URL;
       sendResponse({ success: true, url: AREA_PARTNER_BASE_URL });
     }
@@ -431,4 +436,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-initHeaderInjection();
+const run = () => {
+  applyStyleMode();
+  loadButtonPreferences();
+  observeDarkModeChanges();
+  initHeaderInjection();
+};
+run();
