@@ -202,17 +202,6 @@ function injectIntoHeader() {
   }
 }
 
-// Executa quando o DOM estiver pronto
-function initHeaderInjection() {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run, { once: true });
-  } else run();
-
-  // Mantém para páginas SPA (DOM muda depois)
-  const mo = new MutationObserver(() => injectIntoHeader());
-  mo.observe(document.documentElement, { childList: true, subtree: true });
-}
-
 function captureClientName() {
   const nameElement = getElementByXPath(
     clienteSatisfeitoHTMLSelectors.clientNameXPath,
@@ -436,10 +425,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-const run = () => {
-  applyStyleMode();
-  loadButtonPreferences();
-  observeDarkModeChanges();
-  initHeaderInjection();
-};
-run();
+function init() {
+  function run() {
+    applyStyleMode();
+    loadButtonPreferences();
+    observeDarkModeChanges();
+    //initAudioElementsObserver();
+  }
+  // Executa quando o DOM estiver pronto
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run, { once: true });
+  } else run();
+}
+init();
