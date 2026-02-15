@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Extensão SOFTCOM",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos.",
   "icons": {
     "512": "icon.png",
     "128": "icon128x128.png"
   },
-  "permissions": ["scripting", "storage"],
+  "permissions": ["storage"],
   "host_permissions": [
     "https://areapartner.softcomsistemas.com.br/*",
     "https://chat.clientesatisfeito.com.br/*"
