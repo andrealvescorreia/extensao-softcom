@@ -309,6 +309,138 @@ function captureCurrentClientInfo() {
   return client;
 }
 
+function getAudioSource(audioElement) {
+  if (!audioElement) return null;
+  let src =
+    audioElement.currentSrc ||
+    audioElement.src ||
+    audioElement.querySelector("source")?.src;
+
+  if (!src) {
+    console.error("Áudio sem fonte identificada.");
+    return null;
+  }
+  return src;
+}
+function getOggAudioSource(audioElement) {
+  let src = getAudioSource(audioElement);
+  if (!src) return null;
+  return src.replaceAll("-converted.mp3", "");
+}
+
+async function transcribe(audioSrc) {
+  const url =
+    "https://vmm33rvll7.execute-api.us-east-2.amazonaws.com/prod/transcribe";
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: audioSrc,
+  });
+  const result = await response.json();
+  return result;
+}
+
+function createSpeechToTextButton(audioElement) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "softcom-audio-btn";
+  button.textContent = "Transcrever";
+  button.style.cssText = `
+    width: 82%;
+    margin-top: 7px;
+    margin-bottom: 3px;
+    padding: 10px 5px;
+    border-radius: 26px;
+    border: none;
+    background: #3970fcff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  button.addEventListener("click", async () => {
+    const src = getOggAudioSource(audioElement);
+    if (!src) {
+      console.error("Áudio sem fonte identificada.");
+      return;
+    }
+    button.disabled = true;
+    button.textContent = "Transcrevendo...";
+    const result = await transcribe(src);
+    button.textContent = "Transcrição concluida";
+    button.disabled = false;
+    const italicText = document.createElement("i");
+    italicText.style.cssText = `
+    margin-top: 5px;
+    margin-bottom: 5px;
+    `;
+    italicText.textContent = result;
+    const downloadElement = button.nextElementSibling;
+    downloadElement.textContent = "";
+    downloadElement.appendChild(italicText);
+  });
+
+  return button;
+}
+
+let isAddingAudioButtons = false;
+
+function addSpeechToTextButtons() {
+  if (isAddingAudioButtons) return;
+
+  const audioElements = document.querySelectorAll(
+    'audio[controls]:not([data-softcom-audio-button-attached="true"])',
+  );
+
+  if (!audioElements.length) return;
+
+  isAddingAudioButtons = true;
+  console.log(
+    `Encontrados ${audioElements.length} elementos de áudio com controles sem botão na página.`,
+  );
+
+  audioElements.forEach((audioElement) => {
+    const button = createSpeechToTextButton(audioElement);
+    const audioGrandParent = audioElement.parentElement.parentElement;
+    audioGrandParent.insertBefore(button, audioGrandParent.children[3]);
+    audioElement.dataset.softcomAudioButtonAttached = "true";
+  });
+
+  isAddingAudioButtons = false;
+}
+
+function initAudioElementsObserver() {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", addSpeechToTextButtons, {
+      once: true,
+    });
+  } else {
+    addSpeechToTextButtons();
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    if (isAddingAudioButtons) return;
+    const hasNewAudio = mutations.some((mutation) =>
+      Array.from(mutation.addedNodes || []).some(
+        (node) =>
+          node.nodeType === Node.ELEMENT_NODE &&
+          (node.matches?.("audio[controls]") ||
+            node.querySelector?.("audio[controls]")),
+      ),
+    );
+    if (!hasNewAudio) return;
+    addSpeechToTextButtons();
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+}
+
 btnOcorrencia.addEventListener("click", () => {
   const currentClientInfo = captureCurrentClientInfo();
   if (currentClientInfo.code === "") {
@@ -430,7 +562,7 @@ function init() {
     applyStyleMode();
     loadButtonPreferences();
     observeDarkModeChanges();
-    //initAudioElementsObserver();
+    initAudioElementsObserver();
   }
   // Executa quando o DOM estiver pronto
   if (document.readyState === "loading") {

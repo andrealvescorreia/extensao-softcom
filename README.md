@@ -7,9 +7,11 @@ Esta extensão integra o Cliente Satisfeito – ferramenta de chat utilizada na 
 - Ver cliente atual do chat na área partner;
 - Ver prospectado atual do chat na área partner;
 - Criar ocorrência para o cliente atual do chat, inserindo automáticamente nome e telefone no formulário;
-- Preenchimento automático do formulário de ocorrência, com predefinições para SPED e para encaminhar para a matriz;
+- Transcrição de audio enviado pelo cliente para texto;
+- Preenchimento automático do formulário de ocorrência, com predefinições para SPED;
 - Botão de copiar os digitos do CNPJ do cliente na área partner;
 - "Poços" de tamanho maior na área partner, facilitando visualização das ocorrências e deixando a tela mais limpa.
+- Botão "Arquivar Todos" para arquivar todas as suas ocorrências de uma só vez.
 
 ### Instalação
 
