@@ -83,9 +83,51 @@ function addArchiveAllButton() {
 }
 
 function applyChanges() {
-  widePanels();
   hidePosVendasPanels();
-  moveCurrentUserPanelToTop();
   addArchiveAllButton();
+
+  // Verificar se deve mover o painel ao topo
+  chrome.storage.sync.get(["move-panel-to-top-enabled"], (result) => {
+    const isEnabled =
+      result["move-panel-to-top-enabled"] !== false &&
+      result["move-panel-to-top-enabled"] !== undefined; // Padrão: false
+    if (isEnabled) {
+      moveCurrentUserPanelToTop();
+    }
+  });
+
+  // Verificar se deve deixar os painéis largos
+  chrome.storage.sync.get(["wide-panels-enabled"], (result) => {
+    const isEnabled =
+      result["wide-panels-enabled"] !== false &&
+      result["wide-panels-enabled"] !== undefined; // Padrão: false
+    if (isEnabled) {
+      widePanels();
+    }
+  });
 }
 applyChanges();
+
+// Listener para mudanças no toggle
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "toggleWidePanels") {
+    if (request.isEnabled) {
+      widePanels();
+    } else {
+      // Recarregar a página para reverter
+      location.reload();
+    }
+  }
+});
+
+// Listener para mudanças no toggle
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "toggleMovePanelToTop") {
+    if (request.isEnabled) {
+      moveCurrentUserPanelToTop();
+    } else {
+      // Recarregar a página para reverter
+      location.reload();
+    }
+  }
+});
