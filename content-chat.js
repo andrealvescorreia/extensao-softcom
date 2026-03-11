@@ -278,8 +278,14 @@ function captureArrivalAndDepartureTime() {
     if (arrivalMessages.includes(lines[2]) && !arrivalTime) {
       arrivalTime = lines[3];
     }
+    if (arrivalMessages.includes(lines[1]) && !arrivalTime) {
+      arrivalTime = lines[2];
+    }
     if (departureMessages.includes(lines[2]) && !departureTime) {
       departureTime = lines[3];
+    }
+    if (departureMessages.includes(lines[1]) && !departureTime) {
+      departureTime = lines[2];
     }
   }
   if (!arrivalTime) {
