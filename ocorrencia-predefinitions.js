@@ -29,6 +29,15 @@ const ocorrenciaPredefinitions = [
     urgente: true,
     servicoRealizado: "",
   },
+  {
+    name: "Certificado atualizado",
+    usuarioPartner: "(usuario_atual)",
+    suporte: "Partner",
+    assunto: "TEC REMOTO",
+    motivo: "Atualizar certificado digital.",
+    servicoRealizado:
+      "Certificado digital atualizado e configurado no sistema.",
+  },
   // exemplo com todos os campos preenchidos
   /*{
     name: "MODELO",
