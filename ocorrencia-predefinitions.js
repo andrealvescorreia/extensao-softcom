@@ -20,16 +20,6 @@ const ocorrenciaPredefinitions = [
     servicoRealizado: "",
   },
   {
-    name: "Apoio Matriz Urgente",
-    usuarioPartner: "[selecione]",
-    suporte: "Apoio Tecnico",
-    assunto: "APOIO",
-    motivo:
-      "DEMANDA ENCAMINHADA PARA A MATRIZ POIS ESTAMOS COM A EQUIPE TÉC. REDUZIDA E SEM O TEC. INTERNO NO MOMENTO.",
-    urgente: true,
-    servicoRealizado: "",
-  },
-  {
     name: "Certificado atualizado",
     usuarioPartner: "(usuario_atual)",
     suporte: "Partner",
