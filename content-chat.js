@@ -456,9 +456,7 @@ btnOcorrencia.addEventListener("click", () => {
   }
   btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
-  }?name=${encodeURIComponent(
-    currentClientInfo.name,
-  )}&phone=${encodeURIComponent(currentClientInfo.phone)}&assunto=TEC REMOTO`;
+  }?name=${encodeURIComponent(currentClientInfo.name)}&assunto=TEC REMOTO`;
 });
 
 btnOCFinalizada.addEventListener("click", () => {
@@ -471,10 +469,7 @@ btnOCFinalizada.addEventListener("click", () => {
   }
   btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
-  }?name=${encodeURIComponent(
-    currentClientInfo.name,
-  )}&phone=${encodeURIComponent(
-    currentClientInfo.phone,
+  }
   )}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(
     arrivalTime || "",
   )}&departureTime=${encodeURIComponent(departureTime || "")}`;
