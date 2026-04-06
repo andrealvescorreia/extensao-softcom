@@ -469,7 +469,8 @@ btnOCFinalizada.addEventListener("click", () => {
   }
   btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
     currentClientInfo.code
-  }
+  }?name=${encodeURIComponent(
+    currentClientInfo.name,
   )}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(
     arrivalTime || "",
   )}&departureTime=${encodeURIComponent(departureTime || "")}`;
