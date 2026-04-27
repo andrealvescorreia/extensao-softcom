@@ -1,5 +1,5 @@
 // CLIENTE SATISFEITO
-
+console.log("Oi da extensão softcom :)");
 const AREA_PARTNER_URL_PRODUCTION =
   "https://areapartner.softcomsistemas.com.br/";
 const AREA_PARTNER_URL_ALTERNATIVE =
@@ -134,19 +134,25 @@ let buttonPreferences = {
 };
 
 // Carregar preferências inicialmente
-function loadButtonPreferences() {
-  chrome.storage.sync.get(Object.keys(buttonPreferences), (result) => {
+async function loadButtonPreferences() {
+  chrome.storage.sync.get(Object.keys(buttonPreferences), async (result) => {
     Object.keys(buttonPreferences).forEach((key) => {
       buttonPreferences[key] = result[key] !== false;
     });
     // Injetar após carregar preferências
-    injectIntoHeader();
+    await injectIntoHeader();
   });
 }
 
-function injectIntoHeader() {
+async function injectIntoHeader() {
   const header = getElementByXPath(clienteSatisfeitoHTMLSelectors.headerXPath);
-  if (!header) return;
+  if (!header) {
+    console.error("elemento HEADER não encontrado");
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await sleep(4000);
+    injectIntoHeader();
+    return;
+  }
 
   // Usar cache de preferências (síncrono)
   const isOcorrenciaEnabled = buttonPreferences["toggle-btn-ocorrencia"];
