@@ -8,9 +8,19 @@ function getElementByNameIgnoreCase(name) {
   );
 }
 
-function changeSelectedOption(selectElement, optionText) {
+function changeSelectedOptionByText(selectElement, optionText) {
   const option = Array.from(selectElement.options).find(
     (opt) => opt.text === optionText,
+  );
+  selectElement.selectedIndex = option.index;
+
+  // Disparar evento 'change' para o Select detectar a mudança
+  selectElement.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function changeSelectedOptionByValue(selectElement, optionValue) {
+  const option = Array.from(selectElement.options).find(
+    (opt) => opt.value === optionValue,
   );
   selectElement.selectedIndex = option.index;
 
@@ -57,7 +67,7 @@ function solicitanteInfoFromUrl() {
       areaPartnerHTMLSelectors.assuntoId,
     );
     if (selectSubject) {
-      changeSelectedOption(selectSubject, selected.trim());
+      changeSelectedOptionByText(selectSubject, selected.trim());
     } else {
       console.error("Assunto: elemento HTML não encontrado.");
     }
@@ -95,6 +105,7 @@ function applyPredefinition(pred) {
     const elements = {
       support: document.getElementById(selectors.suporteId),
       subject: document.getElementById(selectors.assuntoId),
+      faq: document.getElementById(selectors.faqId),
       user: document.getElementById(selectors.usuarioPartnerId),
       reason: getElementByNameIgnoreCase(selectors.motivoName),
       urgent: getElementByXPath(selectors.urgenteXPath),
@@ -120,16 +131,18 @@ function applyPredefinition(pred) {
       }
     }
     if (pred.suporte !== undefined && elements.support)
-      changeSelectedOption(elements.support, pred.suporte);
+      changeSelectedOptionByText(elements.support, pred.suporte);
     if (pred.assunto !== undefined && elements.subject)
-      changeSelectedOption(elements.subject, pred.assunto);
+      changeSelectedOptionByText(elements.subject, pred.assunto);
+    if (pred.faq !== undefined && elements.faq)
+      changeSelectedOptionByValue(elements.faq, pred.faq)
     if (pred.usuarioPartner !== undefined && elements.user)
       if (pred.usuarioPartner === "(usuario_atual)") {
         const userName = document.querySelectorAll(
           areaPartnerHTMLSelectors.userNameClass,
         )[0].textContent;
-        changeSelectedOption(elements.user, userName);
-      } else changeSelectedOption(elements.user, pred.usuarioPartner);
+        changeSelectedOptionByText(elements.user, userName);
+      } else changeSelectedOptionByText(elements.user, pred.usuarioPartner);
     if (
       pred.urgente !== undefined &&
       elements.urgent &&

@@ -17,6 +17,7 @@ const areaPartnerHTMLSelectors = {
   dddName: "txtDDDContato",
   foneName: "txtFoneContato",
   suporteId: "suportes",
+  faqId: "faq",
   assuntoId: "assunto",
   usuarioPartnerId: "usuario_partner_id",
   motivoName: "motivo",
