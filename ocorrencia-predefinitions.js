@@ -38,13 +38,9 @@ const ocorrenciaPredefinitions = [
     faq: "3993",
   },
   {
-    name: "Emissão NFe",
-    faq: "4708"
+    name: "Atendimento NFe",
+    faq: "4416"
   },
-  {
-    name: "Entrada de NFe",
-    faq: "6333"
-  }
   // exemplo com todos os campos preenchidos
   /*{
     name: "MODELO",
