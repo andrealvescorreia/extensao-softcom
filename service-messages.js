@@ -6,6 +6,7 @@ const arrivalMessages = [
   "certo me manda o acesso por gentileza",
   "me manda o acesso por gentileza",
   "me manda o acesso anydesk por gentileza",
+  "me passa o acesso por gentileza",
   "Me manda o acesso por gentileza",
   "inicio",
   "início",
