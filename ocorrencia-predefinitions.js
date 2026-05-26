@@ -19,6 +19,7 @@ const ocorrenciaPredefinitions = [
     suporte: "Apoio Tecnico",
     assunto: "APOIO",
     servicoRealizado: "",
+    urgente: true,
   },
   {
     name: "Atualização Certificado",
@@ -30,16 +31,56 @@ const ocorrenciaPredefinitions = [
       "Certificado digital atualizado e configurado no sistema.",
   },
   {
-    name: "OC duplicada",
-    faq: "4709",
+    name: "Softshop: Dúvida/treinamento",
+    faq: "7777",
+  },
+  {
+    name: "Softshop: Instalação",
+    faq: "8187",
+  },
+  {
+    name: "Instalação Servidor",
+    faq: "7819",
+  },
+  {
+    name: "PDV: Treinamento",
+    faq: "682",
+  },
+  {
+    name: "PDV: Configurações",
+    faq: "8017",
+  },
+  {
+    name: "PDV: Nota pendente",
+    faq: "3886"
+  },
+  {
+    name: "NFe: Atendimento",
+    faq: "4416"
+  },
+  {
+    name: "MDFe: Atendimento",
+    faq: "4415"
+  },
+  {
+    name: 'Instalação Etiquetadora',
+    faq: "8001"
+  },
+  {
+    name: "Impressora não imprime",
+    faq: "187"
   },
   {
     name: "TEF",
     faq: "3993",
   },
   {
-    name: "Atendimento NFe",
-    faq: "4416"
+    name: "Mudança RFC",
+    faq: "3722"
+  },
+  {
+    name: "OC duplicada",
+    faq: "4709",
   },
   // exemplo com todos os campos preenchidos
   /*{
