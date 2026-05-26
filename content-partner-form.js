@@ -205,7 +205,11 @@ function createPredefinitionsElement() {
     <div class="panel panel-default">
       <div class="panel-heading" role="tab" id="headingFour">
       <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-        <h4 class="panel-title">Predefinições
+        <h4 class="panel-title">
+          <img width="20" style: "padding: 0; margin: 0;">
+            ${puzzleSvg}
+          </img>
+          Predefinições
           <img width="18" src="img/menu_down.png" align="right">
         </h4>
       </a>
