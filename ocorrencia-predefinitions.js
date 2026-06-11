@@ -1,7 +1,7 @@
 const ocorrenciaPredefinitions = [
   {
     name: "SPED",
-    usuarioPartner: "[selecione]",
+    usuarioPartner: "(usuario_atual)",
     suporte: "Partner",
     faq: "4417",
     assunto: "TEC SPED",
@@ -19,7 +19,6 @@ const ocorrenciaPredefinitions = [
     suporte: "Apoio Tecnico",
     assunto: "APOIO",
     servicoRealizado: "",
-    urgente: true,
   },
   {
     name: "Atualização Certificado",
@@ -33,50 +32,87 @@ const ocorrenciaPredefinitions = [
   {
     name: "Softshop: Dúvida/treinamento",
     faq: "7777",
+    assunto: "TEC REMOTO",
   },
   {
     name: "Softshop: Instalação",
     faq: "8187",
+    assunto: "TEC INSTALAÇÃO",
   },
   {
     name: "Instalação Servidor",
     faq: "7819",
+    assunto: "TEC INSTALAÇÃO",
   },
   {
-    name: "PDV: Treinamento",
-    faq: "682",
+    name: "PDV Parado",
+    faq: "6337",
+    assunto: "TEC REMOTO",
   },
   {
     name: "PDV: Configurações",
     faq: "8017",
+    assunto: "TEC REMOTO",
   },
   {
     name: "PDV: Nota pendente",
-    faq: "3886"
+    faq: "3886",
+    assunto: "TEC REMOTO",
+  },
+  {
+    name: "PDV: Treinamento",
+    faq: "682",
+    assunto: "ACOMPANHAMENTO",
+  },
+  {
+    name: "Instabilidade no PIX",
+    faq: "7085",
+    assunto: "TEC REMOTO",
   },
   {
     name: "NFe: Atendimento",
-    faq: "4416"
+    faq: "4416",
+    assunto: "TEC REMOTO",
   },
   {
     name: "MDFe: Atendimento",
-    faq: "4415"
+    faq: "4415",
+    assunto: "TEC REMOTO",
   },
   {
-    name: 'Instalação Etiquetadora',
-    faq: "8001"
+    name: "Instalação Etiquetadora",
+    faq: "8001",
+    assunto: "TEC REMOTO",
   },
   {
     name: "Impressora não imprime",
-    faq: "187"
+    faq: "187",
+    assunto: "TEC REMOTO",
   },
   {
     name: "TEF",
     faq: "3993",
+    assunto: "TEC REMOTO",
+  },
+  {
+    name: "Softcom SMART",
+    faq: "4006",
+    assunto: "TEC REMOTO",
   },
   {
     name: "Mudança RFC",
-    faq: "3722"
+    faq: "3722",
+    assunto: "TEC REMOTO",
+  },
+  {
+    name: "Mudança RFC Rápida",
+    faq: "3510",
+    assunto: "TEC REMOTO",
+  },
+  {
+    name: "INTEMITENCIA SOFTCOMSHOP",
+    faq: "7529",
+    assunto: "TEC REMOTO",
   },
   {
     name: "OC duplicada",
