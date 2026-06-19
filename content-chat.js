@@ -1,5 +1,4 @@
 // CLIENTE SATISFEITO
-console.log("Oi da extensão softcom :)");
 const AREA_PARTNER_URL_PRODUCTION =
   "https://areapartner.softcomsistemas.com.br/";
 const AREA_PARTNER_URL_ALTERNATIVE =
@@ -23,7 +22,7 @@ function isDarkModeActive() {
   if (!target) return false;
 
   if (target.classList.contains("body--dark")) return true;
-  return Boolean(document.querySelector(".body--dark"));
+  return false;
 }
 
 const iconImg = document.createElement("a");
@@ -145,9 +144,14 @@ async function loadButtonPreferences() {
 }
 
 async function injectIntoHeader() {
-  const header = getElementByXPath(clienteSatisfeitoHTMLSelectors.headerXPath);
+  const headerIdentifier = new HTMLElementIdentifier(
+    SelectorType.XPATH,
+    '//*[@id="q-app"]/div/div/div/div/div/header/div',
+  );
+  const header = getHTMLElement(headerIdentifier);
+
   if (!header) {
-    console.error("elemento HEADER não encontrado");
+    console.error("elemento HEADER não encontrado. Tentando novamente em 4s");
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await sleep(4000);
     injectIntoHeader();

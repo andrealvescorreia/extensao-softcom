@@ -25,6 +25,7 @@
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
       "js": [
         "utils.js",
+        "htmlUtils.js",
         "service-messages.js",
         "components/anchor-button.js",
         "html-selectors.js",
@@ -41,6 +42,7 @@
       ],
       "js": [
         "utils.js",
+        "htmlUtils.js",
         "html-selectors.js",
         "ocorrencia-predefinitions.js",
         "components/button.js",

@@ -110,7 +110,7 @@ const ocorrenciaPredefinitions = [
     assunto: "TEC REMOTO",
   },
   {
-    name: "INTEMITENCIA SOFTCOMSHOP",
+    name: "INTERMITENCIA SOFTCOMSHOP",
     faq: "7529",
     assunto: "TEC REMOTO",
   },
