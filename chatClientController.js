@@ -22,13 +22,13 @@ class ChatClientController {
     headerIdentifier,
     clientNameIdentifier,
     clientPhoneIdentifier,
-    clientObservationsIdentifier,
+    clientCodeIdentifier,
     darkModeClass,
   }) {
     this.headerIdentifier = headerIdentifier;
     this.clientNameIdentifier = clientNameIdentifier;
     this.clientPhoneIdentifier = clientPhoneIdentifier;
-    this.clientObservationsIdentifier = clientObservationsIdentifier;
+    this.clientCodeIdentifier = clientCodeIdentifier;
     this.darkModeClass = darkModeClass;
   }
 
@@ -88,9 +88,7 @@ class ChatClientController {
   }
 
   captureClientCode() {
-    const observacoesElement = getHTMLElement(
-      this.clientObservationsIdentifier,
-    );
+    const observacoesElement = getHTMLElement(this.clientCodeIdentifier);
 
     if (!observacoesElement) {
       alert("Observações: elemento HTML não encontrado.");

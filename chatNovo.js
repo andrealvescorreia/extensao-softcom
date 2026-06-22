@@ -13,7 +13,7 @@ const chatAntigoController = new ChatClientController({
     identifier:
       '//*[@id="fullscreen-content"]/div/div[1]/div/div/div[1]/div[2]/div[2]/div',
   },
-  clientObservationsIdentifier: {
+  clientCodeIdentifier: {
     type: SelectorType.ARIALABEL,
     identifier: "Observações",
   },
