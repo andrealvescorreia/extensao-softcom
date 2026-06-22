@@ -1,4 +1,4 @@
-// CLIENTE SATISFEITO
+// CÓDIGO ANTES DA REFATORAÇÃO. USAR APENAS PARA CONSULTA
 const AREA_PARTNER_URL_PRODUCTION =
   "https://areapartner.softcomsistemas.com.br/";
 const AREA_PARTNER_URL_ALTERNATIVE =
@@ -338,12 +338,14 @@ function getAudioSource(audioElement) {
   }
   return src;
 }
+//!AUDIO
 function getOggAudioSource(audioElement) {
   let src = getAudioSource(audioElement);
   if (!src) return null;
   return src.replaceAll("-converted.mp3", "");
 }
 
+//!AUDIO
 async function transcribe(audioSrc) {
   const url =
     "https://vmm33rvll7.execute-api.us-east-2.amazonaws.com/prod/transcribe";
@@ -356,6 +358,7 @@ async function transcribe(audioSrc) {
   return result;
 }
 
+//!AUDIO
 function createSpeechToTextButton(audioElement) {
   const button = document.createElement("button");
   button.type = "button";
@@ -402,8 +405,10 @@ function createSpeechToTextButton(audioElement) {
   return button;
 }
 
+//!AUDIO
 let isAddingAudioButtons = false;
 
+//!AUDIO
 function addSpeechToTextButtons() {
   if (isAddingAudioButtons) return;
 
@@ -428,6 +433,7 @@ function addSpeechToTextButtons() {
   isAddingAudioButtons = false;
 }
 
+//!AUDIO
 function initAudioElementsObserver() {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", addSpeechToTextButtons, {
@@ -510,70 +516,13 @@ btnVerProspectado.addEventListener("click", () => {
   btnVerProspectado.href = url;
 });
 
-// Escutar cliques dos botões vindos do popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  try {
-    const clientName = captureClientName();
-
-    if (request.action === "searchButtonClicked") {
-      const nameParts = clientName.split(" ");
-      nameParts.shift();
-      if (nameParts[0] === "-") nameParts.shift();
-
-      sendResponse({
-        success: true,
-        clientName: nameParts.join(" "),
-      });
-    } else if (request.action === "searchButtonFullNameClicked") {
-      sendResponse({
-        success: true,
-        clientName: clientName,
-      });
-    } else if (request.action === "updateButtonVisibility") {
-      const { buttonId, isEnabled } = request;
-
-      // Mapear buttonId para a chave de preferência
-      const prefKeyMap = {
-        btnOcorrencia: "toggle-btn-ocorrencia",
-        btnOCFinalizada: "toggle-btn-ocorrencia-finalizada",
-        btnVerCliente: "toggle-btn-ver-cliente",
-        btnVerProspectado: "toggle-btn-ver-prospectado",
-      };
-
-      const prefKey = prefKeyMap[buttonId];
-      if (prefKey) {
-        // Atualizar cache localmente
-        buttonPreferences[prefKey] = isEnabled;
-        // Atualizar HTML instantaneamente
-        injectIntoHeader();
-      }
-      sendResponse({ success: true });
-    } else if (request.action === "updateAreaPartnerUrl") {
-      const { useAlternative } = request;
-      AREA_PARTNER_BASE_URL = useAlternative
-        ? AREA_PARTNER_URL_ALTERNATIVE
-        : AREA_PARTNER_URL_PRODUCTION;
-      iconImg.href = AREA_PARTNER_BASE_URL;
-      sendResponse({ success: true, url: AREA_PARTNER_BASE_URL });
-    }
-    sendResponse({ success: true });
-  } catch (error) {
-    console.error("[Content1] Erro ao processar ação:", error);
-    sendResponse({
-      success: false,
-      message: "Erro ao processar ação",
-      error: error.message,
-    });
-  }
-
-  return true;
-});
-
 function init() {
   function run() {
     applyStyleMode();
     loadButtonPreferences();
     observeDarkModeChanges();
+
+    //!AUDIO
     initAudioElementsObserver();
   }
   // Executa quando o DOM estiver pronto

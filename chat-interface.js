@@ -1,5 +1,0 @@
-class ChatInterface {
-  isDarkModeActive() {}
-
-  observeDarkModeChanges() {}
-}

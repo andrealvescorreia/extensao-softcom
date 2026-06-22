@@ -3,7 +3,7 @@ class ChatClientController {
   AREA_PARTNER_URL_ALTERNATIVE =
     "http://177.43.232.2:25123/area-partner/public/";
 
-  AREA_PARTNER_BASE_URL = AREA_PARTNER_URL_PRODUCTION;
+  AREA_PARTNER_BASE_URL = this.AREA_PARTNER_URL_PRODUCTION;
 
   buttonPreferences = {
     "toggle-btn-ocorrencia": true,
@@ -18,23 +18,25 @@ class ChatClientController {
   btnOCFinalizada;
   btnVerProspectado;
 
-  constructor(
+  constructor({
     headerIdentifier,
     clientNameIdentifier,
     clientPhoneIdentifier,
     clientObservationsIdentifier,
     darkModeClass,
-  ) {
+  }) {
     this.headerIdentifier = headerIdentifier;
     this.clientNameIdentifier = clientNameIdentifier;
     this.clientPhoneIdentifier = clientPhoneIdentifier;
     this.clientObservationsIdentifier = clientObservationsIdentifier;
     this.darkModeClass = darkModeClass;
+  }
 
+  init() {
     this.createIconImgElement();
     this.loadAreaPartnerUrlFromStorage();
-    this.createButtonElements();
     this.observeDarkModeChanges();
+    this.createButtonElements();
     this.loadButtonPreferences();
     this.injectIntoHeader();
   }
@@ -43,22 +45,22 @@ class ChatClientController {
     // Carregar URL da Area Partner do storage
     chrome.storage.sync.get(["area-partner-use-alternative"], (result) => {
       const useAlternative = result["area-partner-use-alternative"] || false;
-      AREA_PARTNER_BASE_URL = useAlternative
-        ? AREA_PARTNER_URL_ALTERNATIVE
-        : AREA_PARTNER_URL_PRODUCTION;
+      this.AREA_PARTNER_BASE_URL = useAlternative
+        ? this.AREA_PARTNER_URL_ALTERNATIVE
+        : this.AREA_PARTNER_URL_PRODUCTION;
 
       // Atualizar href do ícone
-      iconImg.href = AREA_PARTNER_BASE_URL;
+      this.iconImgElement.href = this.AREA_PARTNER_BASE_URL;
     });
   }
 
   createIconImgElement() {
     this.iconImgElement = document.createElement("a");
-    iconImg.id = "softcom-header-icon";
-    iconImg.href = AREA_PARTNER_BASE_URL;
-    iconImg.target = "_blank";
-    iconImg.rel = "noopener noreferrer";
-    iconImg.style.cssText = `
+    this.iconImgElement.id = "softcom-header-icon";
+    this.iconImgElement.href = this.AREA_PARTNER_BASE_URL;
+    this.iconImgElement.target = "_blank";
+    this.iconImgElement.rel = "noopener noreferrer";
+    this.iconImgElement.style.cssText = `
       margin-left: 5px;
       margin-right: 5px;
       cursor: pointer;
@@ -76,50 +78,78 @@ class ChatClientController {
     this.iconImgElement.appendChild(img);
   }
 
+  captureClientName() {
+    const nameElement = getHTMLElement(this.clientNameIdentifier);
+    if (!nameElement) {
+      alert("Nome do cliente: elemento HTML não encontrado.");
+      return null;
+    }
+    return nameElement.innerText.trim().replace(/\p{Emoji}/gu, ""); //remove emojis
+  }
+
+  captureClientCode() {
+    const observacoesElement = getHTMLElement(
+      this.clientObservationsIdentifier,
+    );
+
+    if (!observacoesElement) {
+      alert("Observações: elemento HTML não encontrado.");
+      return null;
+    }
+
+    const text = observacoesElement.value.trim();
+    if (text.includes("\n")) {
+      const lines = text.split("\n");
+      const defaultChoice = "1";
+      const choice = prompt(
+        "Foram encontradas múltiplas linhas nas observações. Insira o número da linha que contém o código do cliente:\n" +
+          lines.map((line, index) => `${index + 1}: ${line}`).join("\n"),
+        defaultChoice,
+      );
+      if (choice !== null) {
+        const lineNumber = parseInt(choice, 10);
+        if (
+          !isNaN(lineNumber) &&
+          lineNumber > 0 &&
+          lineNumber <= lines.length
+        ) {
+          return lines[lineNumber - 1].trim();
+        } else {
+          alert("Número de linha inválido.");
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
+
+    return text;
+  }
+
+  captureClientPhone() {
+    const phoneElement = getHTMLElement(this.clientPhoneIdentifier);
+    if (!phoneElement) {
+      alert("Telefone do cliente: elemento HTML não encontrado.");
+      return null;
+    }
+    return phoneElement.innerHTML.trim();
+  }
+
+  captureCurrentClientInfo() {
+    const client = {
+      name: this.captureClientName(),
+      code: this.captureClientCode(),
+      phone: this.captureClientPhone(),
+    };
+    return client;
+  }
+
   createButtonElements() {
     this.btnOcorrencia = createAnchorButton(
       "softcom-ocorrencia-btn",
       "Criar OC.",
       journalPlusSVG,
     );
-
-    this.btnOCFinalizada = createAnchorButton(
-      "softcom-ocorrencia-finalizada-btn",
-      "OC. Finalizada",
-      checkSVG,
-    );
-
-    // Criar ícone de help com interrogação
-    const helpIconOCFinalizada = document.createElement("span");
-    helpIconOCFinalizada.innerText = "?";
-    helpIconOCFinalizada.style.cssText = `
-  align-items: center;
-  color: white;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: help;
-  position: absolute;
-  margin-top: -18px;
-  margin-right: -6px;
-  text-shadow:
-    -1px -1px 0 #000, 
-     1px -1px 0 #000,
-    -1px  1px 0 #000, 
-     1px  1px 0 #000;
-`;
-    helpIconOCFinalizada.title = "Clique aqui para mais informações.";
-    helpIconOCFinalizada.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      alert(`
-    Captura horários de chegada e saída da conversa atual para preencher no formulário da OC. Funciona tanto com mensagens enviadas quanto com notas internas.
-    O horário de chegada é identificado quando é usada uma das seguintes frases:
-    ${arrivalMessages.map((msg) => `\n- "${msg}"`).join("")}
-    O horário de saída é identificado quando é usada uma das seguintes frases:
-    ${departureMessages.map((msg) => `\n- "${msg}"`).join("")}
-    `);
-    });
-    btnOCFinalizada.appendChild(helpIconOCFinalizada);
 
     this.btnVerCliente = createAnchorButton(
       "softcom-ver-cliente-btn",
@@ -137,61 +167,42 @@ class ChatClientController {
 
   addEventListenersToButtons() {
     this.btnOcorrencia.addEventListener("click", () => {
-      const currentClientInfo = captureCurrentClientInfo();
+      const currentClientInfo = this.captureCurrentClientInfo();
       if (currentClientInfo.code === "") {
-        this.btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
+        this.btnOcorrencia.href = `${this.AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
         alert(
           "Código do cliente não encontrado. Insira o código nas observações.",
         );
         return;
       }
-      this.btnOcorrencia.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
+      this.btnOcorrencia.href = `${this.AREA_PARTNER_BASE_URL}agenda/form/id/${
         currentClientInfo.code
       }?name=${encodeURIComponent(currentClientInfo.name)}&assunto=TEC REMOTO`;
     });
 
-    this.btnOCFinalizada.addEventListener("click", () => {
-      const currentClientInfo = captureCurrentClientInfo();
-      const { arrivalTime, departureTime } = captureArrivalAndDepartureTime();
-      if (currentClientInfo.code === "") {
-        this.btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
-        alert(
-          "Código do cliente não encontrado. Insira o código nas observações.",
-        );
-        return;
-      }
-      this.btnOCFinalizada.href = `${AREA_PARTNER_BASE_URL}agenda/form/id/${
-        currentClientInfo.code
-      }?name=${encodeURIComponent(
-        currentClientInfo.name,
-      )}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(
-        arrivalTime || "",
-      )}&departureTime=${encodeURIComponent(departureTime || "")}`;
-    });
-
     this.btnVerCliente.addEventListener("click", () => {
-      const currentClientInfo = captureCurrentClientInfo();
+      const currentClientInfo = this.captureCurrentClientInfo();
       if (currentClientInfo.code === "") {
-        this.btnVerCliente.href = `${AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
+        this.btnVerCliente.href = `${this.AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
         alert(
           "Código do cliente não encontrado. Insira o código nas observações.",
         );
         return;
       }
-      const url = `${AREA_PARTNER_BASE_URL}cliente/index/detail/id/${currentClientInfo.code}`;
+      const url = `${this.AREA_PARTNER_BASE_URL}cliente/index/detail/id/${currentClientInfo.code}`;
       this.btnVerCliente.href = url;
     });
 
     this.btnVerProspectado.addEventListener("click", () => {
-      const currentClientInfo = captureCurrentClientInfo();
+      const currentClientInfo = this.captureCurrentClientInfo();
       if (currentClientInfo.code === "") {
-        this.btnVerProspectado.href = `${AREA_PARTNER_BASE_URL}comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
+        this.btnVerProspectado.href = `${this.AREA_PARTNER_BASE_URL}comercial/prospectado?&nome_do_cliente=${currentClientInfo.name}`;
         alert(
           "Código do prospectado não encontrado. Insira o código nas observações.",
         );
         return;
       }
-      const url = `${AREA_PARTNER_BASE_URL}comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
+      const url = `${this.AREA_PARTNER_BASE_URL}comercial/prospectado/form/table/prospectado/id/${currentClientInfo.code}`;
       this.btnVerProspectado.href = url;
     });
   }
@@ -202,18 +213,17 @@ class ChatClientController {
     return target.classList.contains(this.darkModeClass);
   }
   applyStyleMode() {
-    const isDarkMode = isDarkModeActive();
-    btnOcorrencia.classList.toggle("dark-mode", isDarkMode);
-    btnOCFinalizada.classList.toggle("dark-mode", isDarkMode);
-    btnVerCliente.classList.toggle("dark-mode", isDarkMode);
-    btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
+    const isDarkMode = this.isDarkModeActive();
+    this.btnOcorrencia.classList.toggle("dark-mode", isDarkMode);
+    this.btnVerCliente.classList.toggle("dark-mode", isDarkMode);
+    this.btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
   }
 
   // Observer para monitorar mudanças no modo escuro
   observeDarkModeChanges() {
     const bodyElement = document.body || document.documentElement;
     const observer = new MutationObserver(() => {
-      applyStyleMode();
+      this.applyStyleMode();
     });
 
     observer.observe(bodyElement, {
@@ -223,63 +233,62 @@ class ChatClientController {
   }
 
   async loadButtonPreferences() {
-    chrome.storage.sync.get(Object.keys(buttonPreferences), async (result) => {
-      Object.keys(buttonPreferences).forEach((key) => {
-        buttonPreferences[key] = result[key] !== false;
-      });
-      // Injetar após carregar preferências
-      await injectIntoHeader();
-    });
+    chrome.storage.sync.get(
+      Object.keys(this.buttonPreferences),
+      async (result) => {
+        Object.keys(this.buttonPreferences).forEach((key) => {
+          this.buttonPreferences[key] = result[key] !== false;
+        });
+        // Injetar após carregar preferências
+        await this.injectIntoHeader();
+      },
+    );
   }
 
   async injectIntoHeader() {
     const header = getHTMLElement(this.headerIdentifier);
+    const buttonsContainer = document.createElement("div");
+
+    buttonsContainer.style.cssText = `
+      display: flex;
+      flex-direction: row;
+    `;
 
     if (!header) {
-      console.error("elemento HEADER não encontrado. Tentando novamente em 4s");
+      console.warn("elemento HEADER não encontrado. Tentando novamente em 4s");
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       await sleep(4000);
-      injectIntoHeader();
+      this.injectIntoHeader();
       return;
     }
+    header.appendChild(buttonsContainer);
 
     // Usar cache de preferências (síncrono)
-    const isOcorrenciaEnabled = buttonPreferences["toggle-btn-ocorrencia"];
-    const isOCFinalizadaEnabled =
-      buttonPreferences["toggle-btn-ocorrencia-finalizada"];
-    const isVerClienteEnabled = buttonPreferences["toggle-btn-ver-cliente"];
+    const isOcorrenciaEnabled = this.buttonPreferences["toggle-btn-ocorrencia"];
+    const isVerClienteEnabled =
+      this.buttonPreferences["toggle-btn-ver-cliente"];
     const isVerProspectadoEnabled =
-      buttonPreferences["toggle-btn-ver-prospectado"];
+      this.buttonPreferences["toggle-btn-ver-prospectado"];
 
     // Evita duplicação e respeita preferências
     if (!document.getElementById("softcom-header-icon")) {
-      header.insertBefore(iconImg, header.children[1]);
+      buttonsContainer.appendChild(this.iconImgElement);
     }
 
     // Criar OC
     if (isOcorrenciaEnabled) {
       if (!document.getElementById("softcom-ocorrencia-btn")) {
-        header.insertBefore(btnOcorrencia, header.children[2]);
+        buttonsContainer.appendChild(this.btnOcorrencia);
       }
     } else {
       const btn = document.getElementById("softcom-ocorrencia-btn");
       if (btn) btn.remove();
     }
 
-    // OC Finalizada
-    if (isOCFinalizadaEnabled) {
-      if (!document.getElementById("softcom-ocorrencia-finalizada-btn")) {
-        header.insertBefore(btnOCFinalizada, header.children[3]);
-      }
-    } else {
-      const btn = document.getElementById("softcom-ocorrencia-finalizada-btn");
-      if (btn) btn.remove();
-    }
-
     // Ver Cliente
     if (isVerClienteEnabled) {
       if (!document.getElementById("softcom-ver-cliente-btn")) {
-        header.insertBefore(btnVerCliente, header.children[4]);
+        buttonsContainer.appendChild(this.btnVerCliente);
       }
     } else {
       const btn = document.getElementById("softcom-ver-cliente-btn");
@@ -289,7 +298,7 @@ class ChatClientController {
     // Ver Prospectado
     if (isVerProspectadoEnabled) {
       if (!document.getElementById("softcom-ver-prospectado-btn")) {
-        header.insertBefore(btnVerProspectado, header.children[5]);
+        buttonsContainer.appendChild(this.btnVerProspectado);
       }
     } else {
       const btn = document.getElementById("softcom-ver-prospectado-btn");
