@@ -76,7 +76,6 @@ searchButtonFullName.addEventListener("click", () => {
 // Menu de opções de botões
 const buttonToggles = {
   "toggle-btn-ocorrencia": "btnOcorrencia",
-  "toggle-btn-ocorrencia-finalizada": "btnOCFinalizada",
   "toggle-btn-ver-cliente": "btnVerCliente",
   "toggle-btn-ver-prospectado": "btnVerProspectado",
 };
