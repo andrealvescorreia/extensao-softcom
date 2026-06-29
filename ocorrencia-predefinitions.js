@@ -35,9 +35,19 @@ const ocorrenciaPredefinitions = [
     assunto: "TEC REMOTO",
   },
   {
+    name: "Treinamento cliente novo Softshop",
+    faq: "3590",
+    assunto: "ACOMPANHAMENTO",
+  },
+  {
     name: "Softshop: Instalação",
     faq: "8187",
     assunto: "TEC INSTALAÇÃO",
+  },
+  {
+    name: "Softshop: Correções",
+    faq: "3665",
+    assunto: "TEC REMOTO",
   },
   {
     name: "Instalação Servidor",
@@ -62,11 +72,11 @@ const ocorrenciaPredefinitions = [
   {
     name: "PDV: Treinamento",
     faq: "682",
-    assunto: "ACOMPANHAMENTO",
+    assunto: "TEC REMOTO",
   },
   {
-    name: "Instabilidade no PIX",
-    faq: "7085",
+    name: "PIX: Dúvida/Treinamento",
+    faq: "8032",
     assunto: "TEC REMOTO",
   },
   {
@@ -85,18 +95,13 @@ const ocorrenciaPredefinitions = [
     assunto: "TEC REMOTO",
   },
   {
-    name: "Impressora não imprime",
-    faq: "187",
+    name: "Instalação Impressora",
+    faq: "1035",
     assunto: "TEC REMOTO",
   },
   {
     name: "TEF",
     faq: "3993",
-    assunto: "TEC REMOTO",
-  },
-  {
-    name: "Softcom SMART",
-    faq: "4006",
     assunto: "TEC REMOTO",
   },
   {
@@ -113,6 +118,11 @@ const ocorrenciaPredefinitions = [
     name: "INTERMITENCIA SOFTCOMSHOP",
     faq: "7529",
     assunto: "TEC REMOTO",
+  },
+  {
+    name: "SOFTCOMSHOP Treinamento",
+    faq: "7779",
+    assunto: "ACOMPANHAMENTO",
   },
   {
     name: "OC duplicada",
