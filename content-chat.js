@@ -39,7 +39,7 @@ iconImg.style.cssText = `
 `;
 
 const img = document.createElement("img");
-img.src = chrome.runtime.getURL("icon.png");
+img.src = chrome.runtime.getURL("assets/icon.png");
 img.alt = "Softcom Extensão";
 img.style.cssText = `
   width: 32px;

@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Extensão SOFTCOM",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos.",
   "icons": {
-    "512": "icon.png",
-    "128": "icon128x128.png"
+    "512": "assets/icon.png",
+    "128": "assets/icon128x128.png"
   },
   "permissions": ["storage"],
   "host_permissions": [
@@ -16,18 +16,17 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_title": "ClienteSatisfeito + AreaPartner SOFTCOM",
-    "default_icon": "icon.png"
+    "default_icon": "assets/icon.png"
   },
   "content_scripts": [
     {
       "matches": ["https://chat.clientesatisfeito.com.br/*"],
       "js": [
-        "utils.js",
+        "assets/svgs.js",
         "htmlUtils.js",
         "chatClientController.js",
-        "service-messages.js",
         "components/anchor-button.js",
         "chatAntigo.js"
       ],
@@ -36,10 +35,9 @@
     {
       "matches": ["https://chatnovo.clientesatisfeito.com.br/*"],
       "js": [
-        "utils.js",
+        "assets/svgs.js",
         "htmlUtils.js",
         "chatClientController.js",
-        "service-messages.js",
         "components/anchor-button.js",
         "chatNovo.js"
       ],
@@ -53,7 +51,7 @@
         "http://177.43.232.2:25123/area-partner/public/ocorrencia/form/id/*"
       ],
       "js": [
-        "utils.js",
+        "assets/svgs.js",
         "htmlUtils.js",
         "html-selectors.js",
         "ocorrencia-predefinitions.js",
@@ -67,7 +65,11 @@
         "https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/*",
         "http://177.43.232.2:25123/area-partner/public/cliente/index/detail/id/*"
       ],
-      "js": ["utils.js", "html-selectors.js", "content-partner-client.js"],
+      "js": [
+        "assets/svgs.js",
+        "html-selectors.js",
+        "content-partner-client.js"
+      ],
       "run_at": "document_idle"
     },
     {
@@ -81,7 +83,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icon.png"],
+      "resources": ["assets/icon.png"],
       "matches": ["<all_urls>"]
     }
   ]
