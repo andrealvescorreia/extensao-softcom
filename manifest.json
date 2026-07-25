@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Extensão SOFTCOM",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos.",
   "icons": {
     "512": "assets/icon.png",
@@ -9,7 +9,7 @@
   },
   "permissions": ["storage"],
   "host_permissions": [
-    "https://areapartner.softcomsistemas.com.br/*",
+    "https://portaldofranqueado.softcomsistemas.com.br/*",
     "https://chat.clientesatisfeito.com.br/*"
   ],
   "background": {
@@ -45,8 +45,8 @@
     },
     {
       "matches": [
-        "https://areapartner.softcomsistemas.com.br/agenda/form/*",
-        "https://areapartner.softcomsistemas.com.br/ocorrencia/form/*",
+        "https://portaldofranqueado.softcomsistemas.com.br/agenda/form/*",
+        "https://portaldofranqueado.softcomsistemas.com.br/ocorrencia/form/*",
         "http://177.43.232.2:25123/area-partner/public/agenda/form/id/*",
         "http://177.43.232.2:25123/area-partner/public/ocorrencia/form/id/*"
       ],
@@ -62,7 +62,7 @@
     },
     {
       "matches": [
-        "https://areapartner.softcomsistemas.com.br/cliente/index/detail/id/*",
+        "https://portaldofranqueado.softcomsistemas.com.br/cliente/index/detail/id/*",
         "http://177.43.232.2:25123/area-partner/public/cliente/index/detail/id/*"
       ],
       "js": [
@@ -74,7 +74,7 @@
     },
     {
       "matches": [
-        "https://areapartner.softcomsistemas.com.br/",
+        "https://portaldofranqueado.softcomsistemas.com.br/",
         "http://177.43.232.2:25123/area-partner/public/"
       ],
       "js": ["html-selectors.js", "content-partner.js"],

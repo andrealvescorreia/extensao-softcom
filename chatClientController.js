@@ -1,5 +1,6 @@
 class ChatClientController {
-  AREA_PARTNER_URL_PRODUCTION = "https://areapartner.softcomsistemas.com.br/";
+  AREA_PARTNER_URL_PRODUCTION =
+    "https://portaldofranqueado.softcomsistemas.com.br/";
   AREA_PARTNER_URL_ALTERNATIVE =
     "http://177.43.232.2:25123/area-partner/public/";
 
