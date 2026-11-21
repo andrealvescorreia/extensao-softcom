@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Extensão SOFTCOM",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Integração entre ClienteSatisfeito e AreaPartner. Automatiza processos.",
   "icons": {
     "512": "assets/icon.png",

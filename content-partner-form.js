@@ -135,7 +135,7 @@ function applyPredefinition(pred) {
     if (pred.assunto !== undefined && elements.subject)
       changeSelectedOptionByText(elements.subject, pred.assunto);
     if (pred.faq !== undefined && elements.faq)
-      changeSelectedOptionByValue(elements.faq, pred.faq)
+      changeSelectedOptionByValue(elements.faq, pred.faq);
     if (pred.usuarioPartner !== undefined && elements.user)
       if (pred.usuarioPartner === "(usuario_atual)") {
         const userName = document.querySelectorAll(
@@ -178,16 +178,44 @@ function applyPredefinition(pred) {
   }
 }
 
-let buttons = [];
+const OCPredefinitionButtons = [];
+const OCPredefinitionGroups = new Map();
+
 ocorrenciaPredefinitions.forEach((pred) => {
   const btn = createButton(pred.name + "PredefinitionBtn", pred.name);
   btn.onclick = () => applyPredefinition(pred);
-  buttons.push(btn);
+  OCPredefinitionButtons.push(btn);
+
+  const groupName = pred.group || "Outros";
+  if (!OCPredefinitionGroups.has(groupName)) {
+    OCPredefinitionGroups.set(groupName, []);
+  }
+  OCPredefinitionGroups.get(groupName).push(btn);
 });
 
-const predefiniitonsContainer = document.createElement("div");
-predefiniitonsContainer.class = "panel-body";
-buttons.forEach((btn) => predefiniitonsContainer.appendChild(btn));
+const predefinitionsContainer = document.createElement("div");
+predefinitionsContainer.className = "panel-body";
+
+OCPredefinitionGroups.forEach((buttons, groupName) => {
+  const groupContainer = document.createElement("div");
+  groupContainer.className = "predefinition-group";
+  groupContainer.style.marginBottom = "12px";
+
+  const groupHeader = document.createElement("h5");
+  groupHeader.className = "predefinition-group-header";
+  groupHeader.textContent = groupName;
+  groupHeader.style.margin = "0px 1px";
+  groupHeader.style.fontSize = "16px";
+  groupHeader.style.fontWeight = "bold";
+  groupContainer.appendChild(groupHeader);
+
+  const groupButtons = document.createElement("div");
+  groupButtons.className = "predefinition-group-buttons";
+  buttons.forEach((btn) => groupButtons.appendChild(btn));
+  groupContainer.appendChild(groupButtons);
+
+  predefinitionsContainer.appendChild(groupContainer);
+});
 
 const accordion = document.getElementById(areaPartnerHTMLSelectors.accordionId);
 
@@ -199,7 +227,7 @@ function createPredefinitionsElement() {
   collapseFour.className = "panel-collapse collapse";
   collapseFour.setAttribute("role", "tabpanel");
   collapseFour.setAttribute("aria-labelledby", "headingFour");
-  collapseFour.appendChild(predefiniitonsContainer);
+  collapseFour.appendChild(predefinitionsContainer);
 
   newElement.innerHTML = `
     <div class="panel panel-default">
