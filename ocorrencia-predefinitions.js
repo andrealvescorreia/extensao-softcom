@@ -75,7 +75,7 @@ const ocorrenciaPredefinitions = [
     group: "PDV",
   },
   {
-    name: "PDV: Nota pendente",
+    name: "PDV: NFCe pendente",
     faq: "3886",
     assunto: "TEC REMOTO",
     group: "PDV",

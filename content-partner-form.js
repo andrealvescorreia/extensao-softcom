@@ -255,3 +255,96 @@ if (accordion) {
   const sibling = document.querySelectorAll(".panel")[1];
   sibling.parentNode.insertBefore(predefinitionsElements, sibling);
 }
+
+function createAndInsertCheckInOutButtons() {
+  const checkInBtn = document.createElement("button");
+  checkInBtn.id = "softcom-check-in-btn";
+  checkInBtn.textContent = "Check In";
+  checkInBtn.classList.add("checkin-externa", "btn", "btn-success");
+  checkInBtn.style.color = "white";
+  checkInBtn.type = "button";
+
+  checkInBtn.onclick = () => {
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    let textAreaHoraChegada = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaChegadaName,
+    );
+    if (!textAreaHoraChegada) {
+      textAreaHoraChegada = getElementByNameIgnoreCase(
+        areaPartnerHTMLSelectors.horaChegadaAltName,
+      );
+    }
+    if (textAreaHoraChegada) {
+      textAreaHoraChegada.value = formattedTime;
+    } else {
+      console.error("Hora de chegada: elemento HTML não encontrado.");
+      alert("Erro: Não foi possível realizar o Check In.");
+    }
+  };
+  let textAreaHoraChegada = getElementByNameIgnoreCase(
+    areaPartnerHTMLSelectors.horaChegadaName,
+  );
+  if (!textAreaHoraChegada) {
+    textAreaHoraChegada = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaChegadaAltName,
+    );
+  }
+  if (textAreaHoraChegada) {
+    if (!document.getElementById("softcom-check-in-btn")) {
+      textAreaHoraChegada.insertAdjacentElement("afterend", checkInBtn);
+    }
+  } else {
+    console.error("Hora de chegada: elemento HTML não encontrado.");
+  }
+
+  const checkOutBtn = document.createElement("button");
+  checkOutBtn.id = "softcom-check-out-btn";
+  checkOutBtn.textContent = "Check Out";
+  checkOutBtn.classList.add("checkin-externa", "btn", "btn-primary");
+  checkOutBtn.style.color = "white";
+  checkOutBtn.type = "button";
+
+  checkOutBtn.onclick = () => {
+    const now = new Date();
+    const formattedTime = now.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    let textAreaHoraSaida = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaSaidaName,
+    );
+    if (!textAreaHoraSaida) {
+      textAreaHoraSaida = getElementByNameIgnoreCase(
+        areaPartnerHTMLSelectors.horaSaidaAltName,
+      );
+    }
+
+    if (textAreaHoraSaida) {
+      textAreaHoraSaida.value = formattedTime;
+    } else {
+      console.error("Hora de saída: elemento HTML não encontrado.");
+      alert("Erro: Não foi possível realizar o Check Out.");
+    }
+  };
+  let textAreaHoraSaida = getElementByNameIgnoreCase(
+    areaPartnerHTMLSelectors.horaSaidaName,
+  );
+  if (!textAreaHoraSaida) {
+    textAreaHoraSaida = getElementByNameIgnoreCase(
+      areaPartnerHTMLSelectors.horaSaidaAltName,
+    );
+  }
+  if (textAreaHoraSaida) {
+    if (!document.getElementById("softcom-check-out-btn")) {
+      textAreaHoraSaida.insertAdjacentElement("afterend", checkOutBtn);
+    }
+  } else {
+    console.error("Hora de saída: elemento HTML não encontrado.");
+  }
+}
+
+createAndInsertCheckInOutButtons();

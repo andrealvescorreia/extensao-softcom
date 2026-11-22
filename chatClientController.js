@@ -9,12 +9,14 @@ class ChatClientController {
   buttonPreferences = {
     "toggle-btn-ocorrencia": true,
     "toggle-btn-ocorrencia-finalizada": true,
+    "toggle-btn-check-in": true,
     "toggle-btn-ver-cliente": true,
     "toggle-btn-ver-prospectado": true,
   };
 
   iconImgElement;
   btnOcorrencia;
+  btnCheckIn;
   btnVerCliente;
   btnOCFinalizada;
   btnVerProspectado;
@@ -150,6 +152,12 @@ class ChatClientController {
       journalPlusSVG,
     );
 
+    this.btnCheckIn = createAnchorButton(
+      "softcom-check-in-btn",
+      "OC. Check In",
+      checkSVG,
+    );
+
     this.btnVerCliente = createAnchorButton(
       "softcom-ver-cliente-btn",
       "Ver Cliente",
@@ -177,6 +185,24 @@ class ChatClientController {
       this.btnOcorrencia.href = `${this.AREA_PARTNER_BASE_URL}agenda/form/id/${
         currentClientInfo.code
       }?name=${encodeURIComponent(currentClientInfo.name)}&assunto=TEC REMOTO`;
+    });
+
+    this.btnCheckIn.addEventListener("click", () => {
+      const currentClientInfo = this.captureCurrentClientInfo();
+      if (currentClientInfo.code === "") {
+        this.btnCheckIn.href = `${this.AREA_PARTNER_BASE_URL}cliente/index?&nome_cliente=${currentClientInfo.name}`;
+        alert(
+          "Código do cliente não encontrado. Insira o código nas observações.",
+        );
+        return;
+      }
+      const now = new Date();
+      const arrivalTime = `${String(now.getHours()).padStart(2, "0")}:${String(
+        now.getMinutes(),
+      ).padStart(2, "0")}`;
+      this.btnCheckIn.href = `${this.AREA_PARTNER_BASE_URL}agenda/form/id/${
+        currentClientInfo.code
+      }?name=${encodeURIComponent(currentClientInfo.name)}&assunto=TEC REMOTO&arrivalTime=${encodeURIComponent(arrivalTime)}`;
     });
 
     this.btnVerCliente.addEventListener("click", () => {
@@ -214,6 +240,7 @@ class ChatClientController {
   applyStyleMode() {
     const isDarkMode = this.isDarkModeActive();
     this.btnOcorrencia.classList.toggle("dark-mode", isDarkMode);
+    this.btnCheckIn.classList.toggle("dark-mode", isDarkMode);
     this.btnVerCliente.classList.toggle("dark-mode", isDarkMode);
     this.btnVerProspectado.classList.toggle("dark-mode", isDarkMode);
   }
@@ -268,7 +295,7 @@ class ChatClientController {
       this.buttonPreferences["toggle-btn-ver-cliente"];
     const isVerProspectadoEnabled =
       this.buttonPreferences["toggle-btn-ver-prospectado"];
-
+    const isCheckInEnabled = this.buttonPreferences["toggle-btn-check-in"];
     // Evita duplicação e respeita preferências
     if (!document.getElementById("softcom-header-icon")) {
       buttonsContainer.appendChild(this.iconImgElement);
@@ -281,6 +308,16 @@ class ChatClientController {
       }
     } else {
       const btn = document.getElementById("softcom-ocorrencia-btn");
+      if (btn) btn.remove();
+    }
+
+    // Check In
+    if (isCheckInEnabled) {
+      if (!document.getElementById("softcom-check-in-btn")) {
+        buttonsContainer.appendChild(this.btnCheckIn);
+      }
+    } else {
+      const btn = document.getElementById("softcom-check-in-btn");
       if (btn) btn.remove();
     }
 

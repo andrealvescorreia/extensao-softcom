@@ -18,7 +18,7 @@ function createButton(id, text) {
   button.target = "_blank";
   button.rel = "noopener noreferrer";
 
-  // Hover effects for btnOcorrencia
+  // Hover effects
   button.style.transition = "all 0.2s ease";
   button.addEventListener("mouseenter", () => {
     button.style.transform = "translateY(-1px)";
